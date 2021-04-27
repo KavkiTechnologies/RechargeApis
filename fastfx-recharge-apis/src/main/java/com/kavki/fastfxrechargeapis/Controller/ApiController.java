@@ -1,6 +1,7 @@
 package com.kavki.fastfxrechargeapis.Controller;
 
 import com.kavki.fastfxrechargeapis.Entity.PrepaidModel;
+import com.kavki.fastfxrechargeapis.Entity.PrepaidResponse;
 import com.kavki.fastfxrechargeapis.Service.ApiService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ public class ApiController {
     private ApiService apiService;
 
     @GetMapping("/prepaid")
-    public PrepaidModel doPrepaidRecharge(@RequestBody PrepaidModel prepaidParams){
+    public PrepaidResponse doPrepaidRecharge(@RequestBody PrepaidModel prepaidParams){
         return apiService.prepaidRecharge(prepaidParams);
     }
 }

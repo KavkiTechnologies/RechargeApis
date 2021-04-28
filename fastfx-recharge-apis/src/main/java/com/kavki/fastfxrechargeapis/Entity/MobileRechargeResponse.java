@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PrepaidResponse {
+public class MobileRechargeResponse {
     
     @JsonProperty("ERROR") 
     private int eRROR;
@@ -17,7 +17,7 @@ public class PrepaidResponse {
     @JsonProperty("ORDERID") 
     private int oRDERID;
     @JsonProperty("OPTRANSID") 
-    private int oPTRANSID;
+    private long oPTRANSID;
     @JsonProperty("PARTNERREQID") 
     private String pARTNERREQID;
     @JsonProperty("MESSAGE") 
@@ -30,5 +30,7 @@ public class PrepaidResponse {
     private String uSERVAR3;
     @JsonProperty("COMMISSION") 
     private String cOMMISSION;
+    @JsonProperty("CHARGE") 
+    private String cHARGE;
 
 }

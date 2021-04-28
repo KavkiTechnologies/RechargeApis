@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PrepaidModel {
+public class MobileRechargeModel {
 
     private String partner_id;
     private String api_password;

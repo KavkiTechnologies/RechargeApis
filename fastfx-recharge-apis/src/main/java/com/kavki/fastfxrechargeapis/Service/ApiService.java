@@ -45,7 +45,7 @@ public class ApiService {
                     null,
                     String.class);
             String jsonStr = responseUser.getBody();
-            System.out.println(jsonStr);
+           // System.out.println(jsonStr);
             
             //converting json response from API to Response Obj
             MobileResponse responseObj = new ObjectMapper().readValue(jsonStr, MobileResponse.class);
@@ -115,7 +115,7 @@ public class ApiService {
             
             //converting json response from API to Response Obj
             DthResponse responseObj = new ObjectMapper().readValue(jsonStr, DthResponse.class);
-           System.out.println(responseObj);
+           //System.out.println(responseObj);
             return responseObj;
         }
         catch(Exception e)

@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MobileRecharge {
 
-   // private String partner_id;
-   // private String api_password;
     private long Mobile_no;
     private int operator_code;
     private int amount;

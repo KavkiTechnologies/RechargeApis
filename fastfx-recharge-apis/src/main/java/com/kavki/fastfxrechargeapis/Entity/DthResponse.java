@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class DthResponse {
     
     @JsonProperty("ERROR") 

@@ -12,7 +12,10 @@
 	<artifactId>fastfx-recharge-apis</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>fastfx-recharge-apis</name>
+	<packaging>jar</packaging>
+
 	<description>Demo project for Spring Boot</description>
+
 	<properties>
 		<java.version>11</java.version>
 	</properties>

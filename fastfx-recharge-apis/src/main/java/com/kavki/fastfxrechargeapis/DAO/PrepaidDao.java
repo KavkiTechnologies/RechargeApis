@@ -18,7 +18,7 @@ public class PrepaidDao {
     @Id
     private int orderid;
     @Column(name = "transactionId")
-    private String partner_request_id;
+    private String Partner_request_id;
     private long Mobile_no;
     private int operator_code;
     private int amount;
@@ -37,5 +37,8 @@ public class PrepaidDao {
    private String uSERVAR2;
    @Column(name ="user_val3")
    private String uSERVAR3;
+	// TODO Auto-generated method stub
+	
+
 
 }

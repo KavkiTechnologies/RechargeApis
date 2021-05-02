@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class MobileResponse {
     
     @JsonProperty("ERROR") 

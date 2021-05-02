@@ -19,21 +19,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/recharge")
 public class ApiController {
     
-    @Autowired
+	@Autowired
     private ApiService apiService;
 
     @Autowired
     private DatabaseService dbService;
 
     @GetMapping("/prepaid")
-    public MobileResponse doPrepaidRecharge(@RequestBody MobileRecharge prepaidParams){
-        MobileResponse response = new MobileResponse();
-        response = apiService.prepaidRecharge(prepaidParams);
-        PrepaidMapping pm = new PrepaidMapping();
-        PrepaidDao pd =  pm.prepaidFieldMappingForDb(prepaidParams, response);
+    public MobileResponse doPrepaidRecharge(@RequestBody MobileRecharge requestParams){
+        MobileResponse responseParams = new MobileResponse();
+        responseParams = apiService.prepaidRecharge(requestParams);
+        PrepaidMapping mapper = new PrepaidMapping();
+        PrepaidDao pd =  mapper.prepaidFieldMappingForDb(requestParams, responseParams);
         System.out.println("PD: "+pd);
         dbService.saveTransaction(pd);
-        return response;
+        return responseParams;
     }
 
     @GetMapping("/postpaid")

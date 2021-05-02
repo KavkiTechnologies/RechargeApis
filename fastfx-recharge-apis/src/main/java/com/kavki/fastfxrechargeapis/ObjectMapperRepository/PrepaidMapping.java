@@ -12,9 +12,9 @@ public class PrepaidMapping {
     private PrepaidDao prepaidDao;
 
     public PrepaidDao prepaidFieldMappingForDb(MobileRecharge rechargeParams, MobileResponse responseParams){
-       
+    	
         prepaidDao = new PrepaidDao();
-       
+        
         prepaidDao.setPartner_request_id(rechargeParams.getPartner_request_id());
         prepaidDao.setMobile_no(rechargeParams.getMobile_no());
         prepaidDao.setOperator_code(rechargeParams.getOperator_code());

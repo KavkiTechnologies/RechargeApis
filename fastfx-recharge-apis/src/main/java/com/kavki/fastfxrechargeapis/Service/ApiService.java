@@ -29,7 +29,7 @@ public class ApiService {
         try{
             String new_url = baseUrl + "prepaid/mobile";
             UriComponentsBuilder uriBuilder  = UriComponentsBuilder.fromUriString(new_url)
-            // Add query parameter to url 
+            // Add query parameter to url
             .queryParam("partner_id", env.getProperty("fastfx.partner_id"))
             .queryParam("api_password",env.getProperty("fastfx.api_password"))
             .queryParam("mobile_no", rechargeObj.getMobile_no())

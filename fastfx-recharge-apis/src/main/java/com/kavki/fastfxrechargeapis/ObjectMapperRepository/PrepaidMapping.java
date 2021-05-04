@@ -14,8 +14,8 @@ public class PrepaidMapping {
     public PrepaidDao prepaidFieldMappingForDb(MobileRecharge rechargeParams, MobileResponse responseParams){
     	
         prepaidDao = new PrepaidDao();
-        
-        prepaidDao.setPartner_request_id(rechargeParams.getPartner_request_id());
+
+        prepaidDao.setPartner_request_id(responseParams.getPARTNERREQID());
         prepaidDao.setMobile_no(rechargeParams.getMobile_no());
         prepaidDao.setOperator_code(rechargeParams.getOperator_code());
         prepaidDao.setAmount(rechargeParams.getAmount());
@@ -24,14 +24,13 @@ public class PrepaidMapping {
         prepaidDao.setERROR(responseParams.getERROR());
         prepaidDao.setStatus(responseParams.getSTATUS());
         prepaidDao.setOrderid(responseParams.getORDERID());
-        prepaidDao.setOtransid(responseParams.getOPTRANSID());
+        prepaidDao.setOptransid(responseParams.getOPTRANSID());
         prepaidDao.setMessage(responseParams.getMESSAGE());
         prepaidDao.setCommission(responseParams.getCOMMISSION());
-        prepaidDao.setUSERVAR1(rechargeParams.getUser_varl());
-        prepaidDao.setUSERVAR1(responseParams.getUSERVAR2());
-        prepaidDao.setUSERVAR1(responseParams.getUSERVAR3());
+        prepaidDao.setUSERVAR1(responseParams.getUSERVAR1());
+        prepaidDao.setUSERVAR2(responseParams.getUSERVAR2());
+        prepaidDao.setUSERVAR3(responseParams.getUSERVAR3());
 
-       //System.out.println("DAO2- "+ prepaidDao);
         return prepaidDao;
     }
 }

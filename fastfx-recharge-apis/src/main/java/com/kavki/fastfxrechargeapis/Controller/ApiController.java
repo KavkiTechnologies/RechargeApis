@@ -10,7 +10,9 @@ import com.kavki.fastfxrechargeapis.Service.ApiService;
 import com.kavki.fastfxrechargeapis.Service.DatabaseService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,13 +27,13 @@ public class ApiController {
     @Autowired
     private DatabaseService dbService;
 
-    @GetMapping("/prepaid")
-    public MobileResponse doPrepaidRecharge(@RequestBody MobileRecharge requestParams){
+    @CrossOrigin(origins = "*")
+    @PostMapping("/prepaid")
+    public MobileResponse doPrepaidRecharge(@RequestBody MobileRecharge requestParams){      
         MobileResponse responseParams = new MobileResponse();
         responseParams = apiService.prepaidRecharge(requestParams);
         PrepaidMapping mapper = new PrepaidMapping();
         PrepaidDao pd =  mapper.prepaidFieldMappingForDb(requestParams, responseParams);
-        System.out.println("PD: "+pd);
         dbService.saveTransaction(pd);
         return responseParams;
     }

@@ -12,33 +12,29 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name="test_prepaid")
+@Entity(name="prepaid_service")
 public class PrepaidDao {
     
     @Id
-    private int orderid;
-    @Column(name = "transactionId")
+    @Column(name = "Transaction_Id")
     private String Partner_request_id;
     private long Mobile_no;
+    private int orderid;
     private int operator_code;
     private int amount;
     private int circle;
     private String recharge_type;
-   @Column(name = "error_coe")
+   @Column(name = "error_code")
    private int eRROR;
    @Column(name = "status_code")
    private int status;
-   private long otransid;
+   private long optransid;
    private String message;
    private String commission;
-   @Column(name ="user_val1")
-    private String uSERVAR1;
+   @Column(name ="client_id")
+   private String uSERVAR1;
     @Column(name ="user_val2")
    private String uSERVAR2;
    @Column(name ="user_val3")
    private String uSERVAR3;
-	// TODO Auto-generated method stub
-	
-
-
 }

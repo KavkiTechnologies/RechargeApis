@@ -15,6 +15,6 @@ public class MobileRecharge {
     private String partner_request_id;
     private int circle;
     private String recharge_type;
-    private String user_varl;
+    private String user_var1;
    
 }

@@ -1,4 +1,4 @@
-package com.kavki.fastfxrechargeapis.Entity;
+package com.kavki.fastfxrechargeapis.Entity.Recharge;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,30 +8,28 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
-public class MobileResponse {
+public class DthResponse {
     
     @JsonProperty("ERROR") 
-    private int eRROR;
+    public int eRROR;
     @JsonProperty("STATUS") 
-    private int sTATUS;
+    public int sTATUS;
     @JsonProperty("ORDERID") 
-    private int oRDERID;
+    public String oRDERID;
     @JsonProperty("OPTRANSID") 
-    private long oPTRANSID;
+    public String oPTRANSID;
     @JsonProperty("PARTNERREQID") 
-    private String pARTNERREQID;
+    public String pARTNERREQID;
     @JsonProperty("MESSAGE") 
-    private String mESSAGE;
+    public String mESSAGE;
     @JsonProperty("USERVAR1") 
-    private String uSERVAR1;
+    public String uSERVAR1;
     @JsonProperty("USERVAR2") 
-    private String uSERVAR2;
+    public String uSERVAR2;
     @JsonProperty("USERVAR3") 
-    private String uSERVAR3;
+    public String uSERVAR3;
     @JsonProperty("COMMISSION") 
-    private String cOMMISSION;
+    public String cOMMISSION;
     @JsonProperty("CHARGE") 
-    private String cHARGE;
-
+    public String cHARGE;
 }

@@ -1,4 +1,4 @@
-package com.kavki.fastfxrechargeapis.Entity;
+package com.kavki.fastfxrechargeapis.Entity.Recharge;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

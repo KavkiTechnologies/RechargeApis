@@ -1,11 +1,11 @@
-package com.kavki.fastfxrechargeapis.Service;
+package com.kavki.fastfxrechargeapis.Service.RechargeServices;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kavki.fastfxrechargeapis.Entity.DthRecharge;
-import com.kavki.fastfxrechargeapis.Entity.DthResponse;
-import com.kavki.fastfxrechargeapis.Entity.MobileRecharge;
-import com.kavki.fastfxrechargeapis.Entity.MobileResponse;
-import com.kavki.fastfxrechargeapis.Entity.TransactionIdGenerator;
+import com.kavki.fastfxrechargeapis.Entity.Recharge.DthRecharge;
+import com.kavki.fastfxrechargeapis.Entity.Recharge.DthResponse;
+import com.kavki.fastfxrechargeapis.Entity.Recharge.MobileRecharge;
+import com.kavki.fastfxrechargeapis.Entity.Recharge.MobileResponse;
+import com.kavki.fastfxrechargeapis.Entity.Recharge.TransactionIdGenerator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
-public class ApiService {
+public class RechargeService {
     
     @Autowired
     private RestTemplate restTemplate;
@@ -29,6 +29,7 @@ public class ApiService {
 
         try{
             String new_url = baseUrl + "prepaid/mobile";
+            // genertaing transaction Id
             String transId = new TransactionIdGenerator().generateTransId(rechargeObj.getUser_var1(),rechargeObj.getOperator_code(), rechargeObj.getCircle());
 
             UriComponentsBuilder uriBuilder  = UriComponentsBuilder.fromUriString(new_url)
@@ -43,7 +44,6 @@ public class ApiService {
             .queryParam("recharge_type", rechargeObj.getRecharge_type())
             .queryParam("user_var1",rechargeObj.getUser_var1());
 
-            System.out.println("URL: "+uriBuilder.toUriString());
             //Consuming Recharge API for GET 
             ResponseEntity<String> responseUser = restTemplate.exchange(uriBuilder.toUriString() ,
                     HttpMethod.GET,

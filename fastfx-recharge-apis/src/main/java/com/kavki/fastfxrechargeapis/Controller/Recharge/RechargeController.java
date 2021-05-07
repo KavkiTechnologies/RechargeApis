@@ -1,6 +1,7 @@
 package com.kavki.fastfxrechargeapis.Controller.Recharge;
 
 import com.kavki.fastfxrechargeapis.DTO.MobileToDbEntity;
+import com.kavki.fastfxrechargeapis.DTO.TransactionProcedure;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.*;
 import com.kavki.fastfxrechargeapis.ParamsMapping.MobileParamsMapping;
 import com.kavki.fastfxrechargeapis.Service.RechargeServices.*;
@@ -17,6 +18,7 @@ public class RechargeController {
     private RechargeService apiService;
     @Autowired
     private DatabaseService dbService;
+    @Autowired TransactionProcedure tProcedure;
 
     
     @PostMapping("/prepaid")
@@ -25,7 +27,8 @@ public class RechargeController {
         responseParams = apiService.prepaidRecharge(requestParams);
         MobileParamsMapping mapper = new MobileParamsMapping();
         MobileToDbEntity db =  mapper.mobileEntityMappingForDb(requestParams, responseParams);
-        dbService.saveTransaction(db);
+        tProcedure.callTransactionProcedure(db);
+        // dbService.saveTransaction(db);
         return responseParams.getMESSAGE();
     }
 

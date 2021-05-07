@@ -11,6 +11,25 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "prepaid_Service")
 @Entity(name="prepaid_service")
+@NamedStoredProcedureQuery(
+    name = "transactionsP",
+    procedureName = "transactionsP",
+    parameters = {@StoredProcedureParameter(mode=ParameterMode.IN, name = "transactionId",type = String.class),
+                  @StoredProcedureParameter(mode=ParameterMode.IN,name="clientId",type= String.class),
+                  @StoredProcedureParameter(mode=ParameterMode.IN,name="mobileNo",type= Long.class),
+                  @StoredProcedureParameter(mode=ParameterMode.IN,name="operatorCode",type= Integer.class),
+                  @StoredProcedureParameter(mode=ParameterMode.IN,name="amount",type= Integer.class),
+                  @StoredProcedureParameter(mode=ParameterMode.IN,name="circle",type= Integer.class),
+                  @StoredProcedureParameter(mode=ParameterMode.IN,name="rechargeType",type= String.class),
+                  @StoredProcedureParameter(mode=ParameterMode.IN,name="errorCode",type= Integer.class),
+                  @StoredProcedureParameter(mode=ParameterMode.IN,name="statusCode",type= Integer.class),
+                  @StoredProcedureParameter(mode=ParameterMode.IN,name="orderID",type= Integer.class),
+                  @StoredProcedureParameter(mode=ParameterMode.IN,name="optransId",type= Long.class),
+                  @StoredProcedureParameter(mode=ParameterMode.IN,name="message",type= String.class),
+                  @StoredProcedureParameter(mode=ParameterMode.IN,name="commission",type= String.class),
+                  @StoredProcedureParameter(mode=ParameterMode.IN,name="userVal2",type= String.class),
+                  @StoredProcedureParameter(mode=ParameterMode.IN,name="userVal3",type= String.class)})
+
 public class MobileToDbEntity {
     
     @Id

@@ -23,11 +23,11 @@ public class AdminController {
         return portalServices.getMRecords();
     }
 
-    // @GetMapping("/transactions")
-    // public List<TransactionEntity> getTransactions()
-    // {
-    //     return portalServices.getTRecords();
-    // }
+    @GetMapping("/transactions")
+    public List<TransactionEntity> getTransactions()
+    {
+        return portalServices.getTRecords();
+    }
 
     @GetMapping("/clients")
     public List<ClientEntity> getClients(){
@@ -42,5 +42,20 @@ public class AdminController {
     @GetMapping("/totalbalance")
     public Double getTotalPrefund(){
         return portalServices.getBalance();
+    }
+
+    @GetMapping("/successtrans")
+    public int getSuccessTransactions(){
+        return portalServices.getSuccess();
+    }
+
+    @GetMapping("/failedtrans")
+    public int getFailedTransactions(){
+        return portalServices.getFailed();
+    }
+
+    @GetMapping("/pendingtrans")
+    public int getPendingTransactions(){
+        return portalServices.getPending();
     }
 }

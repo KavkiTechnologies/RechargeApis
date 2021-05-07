@@ -15,14 +15,16 @@ public class AdminPortalServices {
     private ClientListRepo cListRepo;
     @Autowired
     private PrefundRepo prefundRepo;
+    @Autowired
+    private TransactionRepo tListRepo;
 
     public List<MerchantEntity> getMRecords() {
         return mListRepo.findAll();
     }
 
-    // public List<TransactionEntity> getTRecords() {
-    //     return tListRepo.findAll();
-    // }
+    public List<TransactionEntity> getTRecords() {
+        return tListRepo.findAll();
+    }
 
     public List<ClientEntity> getCRecords() {
         return cListRepo.findAll();
@@ -34,6 +36,18 @@ public class AdminPortalServices {
 
     public Double getBalance() {
         return prefundRepo.calcTotal();
+    }
+
+    public int getSuccess(){
+        return tListRepo.calcSuccess();
+    }
+
+    public int getFailed(){
+        return tListRepo.calcFailed();
+    }
+
+    public int getPending(){
+        return tListRepo.calcPending();
     }
 
    

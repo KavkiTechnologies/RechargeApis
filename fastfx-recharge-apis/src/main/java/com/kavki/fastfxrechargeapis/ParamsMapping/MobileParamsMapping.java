@@ -16,15 +16,15 @@ public class MobileParamsMapping {
         mobiledbEntity = new MobileToDbEntity();
 
         mobiledbEntity.setPartner_request_id(responseParams.getPARTNERREQID());
-        mobiledbEntity.setMobile_no(rechargeParams.getMobile_no());
-        mobiledbEntity.setOperator_code(rechargeParams.getOperator_code());
+        mobiledbEntity.setMobileNo(rechargeParams.getMobile_no());
+        mobiledbEntity.setOperatorCode(rechargeParams.getOperator_code());
         mobiledbEntity.setAmount(rechargeParams.getAmount());
         mobiledbEntity.setCircle(rechargeParams.getCircle());
-        mobiledbEntity.setRecharge_type(rechargeParams.getRecharge_type());
+        mobiledbEntity.setRechargeType(rechargeParams.getRecharge_type());
         mobiledbEntity.setERROR(responseParams.getERROR());
         mobiledbEntity.setStatus(responseParams.getSTATUS());
-        mobiledbEntity.setOrderid(responseParams.getORDERID());
-        mobiledbEntity.setOptransid(responseParams.getOPTRANSID());
+        mobiledbEntity.setOrderId(responseParams.getORDERID());
+        mobiledbEntity.setOptransId(responseParams.getOPTRANSID());
         mobiledbEntity.setMessage(responseParams.getMESSAGE());
         mobiledbEntity.setCommission(responseParams.getCOMMISSION());
         mobiledbEntity.setUSERVAR1(responseParams.getUSERVAR1());

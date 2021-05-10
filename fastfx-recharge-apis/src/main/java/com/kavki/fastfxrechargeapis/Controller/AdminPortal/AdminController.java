@@ -1,6 +1,14 @@
 package com.kavki.fastfxrechargeapis.Controller.AdminPortal;
 
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 import com.kavki.fastfxrechargeapis.Entity.Admin.*;
 import com.kavki.fastfxrechargeapis.Service.AdminServices.AdminPortalServices;
@@ -57,5 +65,11 @@ public class AdminController {
     @GetMapping("/pendingtrans")
     public int getPendingTransactions(){
         return portalServices.getPending();
+    }
+
+    @PostMapping("/login")
+    public String adminLogin(@RequestBody AdminCredentials credentials) 
+        throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException{
+        return portalServices.verifyPassword(credentials);
     }
 }

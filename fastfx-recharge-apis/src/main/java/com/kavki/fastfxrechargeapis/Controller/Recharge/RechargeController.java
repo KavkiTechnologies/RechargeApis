@@ -16,9 +16,10 @@ public class RechargeController {
     
 	@Autowired
     private RechargeService apiService;
-    @Autowired
-    private DatabaseService dbService;
-    @Autowired TransactionProcedure tProcedure;
+    // @Autowired
+    // private DatabaseService dbService;
+    @Autowired 
+    private TransactionProcedure tProcedure;
 
     
     @PostMapping("/prepaid")

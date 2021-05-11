@@ -16,10 +16,10 @@ public class MerchantEntity {
     
     
     @Id
-    @Column(name="Merchant_Name",nullable =  false)
-    private String Merchant;
     @Column(name="S_No",nullable =  false)
     private int SL_No;
+    @Column(name="Merchant_Name",nullable =  false)
+    private String Merchant;
     @Column(name = "Available_Balance", nullable =  false, precision = 10, scale = 4)
     private float Balance;
     @Column(name = "Total_Service_Type", nullable =  false)

@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 public class TransactionEntity {
 
     @Id
+    @Column(name="S_no")
+    private int Sno;
     @Column(name= "Transaction_Id", nullable = false)
     private String TransactionId;
     @Column(name= "Client_Name", nullable = false)

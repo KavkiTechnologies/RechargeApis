@@ -14,10 +14,10 @@ public class ClientEntity {
     
     
     @Id
-    @Column(name = "Mobile_No")
-    private long MobileNo;
     @Column(name="S_No")
     private int SL_No;
+    @Column(name = "Mobile_No")
+    private long MobileNo;
     @Column(name="Email_Id")
     private String EmailId;
     @Column(name = "Client_Name")

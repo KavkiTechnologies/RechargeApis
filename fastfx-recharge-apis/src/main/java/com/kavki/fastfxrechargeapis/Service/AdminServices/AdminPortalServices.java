@@ -11,6 +11,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 import com.kavki.fastfxrechargeapis.DAO.AdminRepositories.*;
+import com.kavki.fastfxrechargeapis.DTO.Encryptor;
 import com.kavki.fastfxrechargeapis.Entity.Admin.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,11 +67,13 @@ public class AdminPortalServices {
         String Email = creds.getEmail();
         String Password = creds.getPassword();
         AdminCredentials credit = loginRepo.findByEmail(Email);
+        if(credit==null)
+            return "Incorrect UserId or Password!";
 
         String encryptPass = credit.getPassword();
         String salt = credit.getSalt();
         Encryptor encrypt = new Encryptor();
-        String newPass = encrypt.verify(Password, salt);
+        String newPass = encrypt.verify(Password, salt); // verifying user password 
         
         if(newPass.equalsIgnoreCase(encryptPass)){
             return "Logged In!";

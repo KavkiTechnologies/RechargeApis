@@ -18,10 +18,10 @@ import lombok.NoArgsConstructor;
 public class PrefundEntity {
     
     @Id
-    @Column(name = "Mobile_No")
-    private long MobileNo;
     @Column(name="S_No")
     private int SL_No;
+    @Column(name = "Mobile_No")
+    private long MobileNo;
     @Column(name = "Client_Name")
     private String Name;
     @Column(name = "Account_Balance")

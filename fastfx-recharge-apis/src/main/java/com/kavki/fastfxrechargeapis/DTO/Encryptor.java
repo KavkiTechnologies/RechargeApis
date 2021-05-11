@@ -1,4 +1,4 @@
-package com.kavki.fastfxrechargeapis.Entity.Admin;
+package com.kavki.fastfxrechargeapis.DTO;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -40,7 +40,7 @@ public class Encryptor {
         return secret;
     }
 
-    public String encrypt(String password)
+    public String[] encrypt(String password)
         throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException,
         InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException {
         
@@ -49,7 +49,11 @@ public class Encryptor {
         Cipher cipher = Cipher.getInstance(algorithm);
         cipher.init(Cipher.ENCRYPT_MODE, secretkey);
         byte[] cipherText = cipher.doFinal(password.getBytes());
-        return Base64.getEncoder().encodeToString(cipherText);
+        String encryptPassword= Base64.getEncoder().encodeToString(cipherText);
+
+        String [] cred = {encryptPassword, newSalt};
+        return cred;
+
     }
 
     public String verify(String password, String salt)

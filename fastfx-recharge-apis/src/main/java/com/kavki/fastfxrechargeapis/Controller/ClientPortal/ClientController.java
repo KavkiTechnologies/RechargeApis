@@ -9,8 +9,11 @@ import java.security.spec.InvalidKeySpecException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+
+import com.kavki.fastfxrechargeapis.Entity.Admin.LoginStatus;
 import com.kavki.fastfxrechargeapis.Entity.Client.ClientCredentials;
 import com.kavki.fastfxrechargeapis.Entity.Client.OnboardClient;
+import com.kavki.fastfxrechargeapis.Entity.Client.OnboardStatus;
 import com.kavki.fastfxrechargeapis.Service.ClientServices.ClientPortalServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,15 +29,15 @@ public class ClientController {
 
     
     @PostMapping("/login")
-    public String clientLogin(@RequestBody ClientCredentials credentials) 
+    public LoginStatus clientLogin(@RequestBody ClientCredentials credentials) 
         throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException{
         return portalServices.verifyPassword(credentials);
     }
 
     @PostMapping("/onboard")
-    public String onboardClient(@RequestBody OnboardClient details) 
+    public OnboardStatus onboardClient(@RequestBody OnboardClient details) 
         throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException{
-        String loginStatus = portalServices.createNewClient(details);
-        return loginStatus;
+        return portalServices.createNewClient(details);
+        
     }
 }

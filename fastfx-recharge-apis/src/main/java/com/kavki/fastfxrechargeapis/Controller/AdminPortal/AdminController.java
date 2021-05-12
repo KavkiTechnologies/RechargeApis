@@ -68,7 +68,7 @@ public class AdminController {
     }
 
     @PostMapping("/login")
-    public String adminLogin(@RequestBody AdminCredentials credentials) 
+    public LoginStatus adminLogin(@RequestBody AdminCredentials credentials) 
         throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException{
         return portalServices.verifyPassword(credentials);
     }

@@ -12,8 +12,10 @@ import javax.crypto.NoSuchPaddingException;
 import com.kavki.fastfxrechargeapis.DAO.ClientRepositories.ClientLoginRepo;
 import com.kavki.fastfxrechargeapis.DTO.Encryptor;
 import com.kavki.fastfxrechargeapis.DTO.OnboardClientProcedure;
+import com.kavki.fastfxrechargeapis.Entity.Admin.LoginStatus;
 import com.kavki.fastfxrechargeapis.Entity.Client.ClientCredentials;
 import com.kavki.fastfxrechargeapis.Entity.Client.OnboardClient;
+import com.kavki.fastfxrechargeapis.Entity.Client.OnboardStatus;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,12 +28,15 @@ public class ClientPortalServices {
     @Autowired
     private OnboardClientProcedure clientProcedure;
 
-    public String verifyPassword(ClientCredentials creds) 
+    public LoginStatus verifyPassword(ClientCredentials creds) 
         throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException{
         String Email = creds.getEmail();
+        LoginStatus loginStatus = new LoginStatus();
         ClientCredentials credit = loginRepo.findByEmail(Email);
-        if(credit==null)
-            return "Incorrect UserId or Password!";
+        if(credit==null){
+            loginStatus.setLoginStatus("Incorrect EmailId or Password!");
+            return loginStatus;
+        }
         
         String Password = creds.getPassword();
         String encryptPass = credit.getPassword();
@@ -41,19 +46,25 @@ public class ClientPortalServices {
         
         if(newPass.equalsIgnoreCase(encryptPass)){
             String clientId = credit.getClientId();
-            return clientId+" Logged In!";
+            loginStatus.setUserId(clientId);
+            loginStatus.setLoginStatus("Successfully Logged In!");
+            return loginStatus;
         }else{
-            return "Incorrect UserId or Password";
+            loginStatus.setLoginStatus("Incorrect EmailId or Password!");
+            return loginStatus;
         }
     }
 
-    public String createNewClient(OnboardClient details) 
+    public OnboardStatus createNewClient(OnboardClient details) 
         throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException {
         String Email = details.getEmail();
 
+        OnboardStatus status = new OnboardStatus();
         ClientCredentials creds = loginRepo.findByEmail(Email);
-        if(creds!=null && Email.equalsIgnoreCase(creds.getEmail()))
-            return "Client Already Exists!";
+        if(creds!=null && Email.equalsIgnoreCase(creds.getEmail())){
+            status.setOnboardStatus("Client Already Exists!");
+            return status;
+        }
 
         String password = details.getPassword();
         Encryptor encrypt = new Encryptor();
@@ -63,7 +74,9 @@ public class ClientPortalServices {
         details.setPassword(clientCredentials[0]); // index 0 -> encrypted pass 
         details.setSalt(clientCredentials[1]);     // index 1 -> encrypted salt
         clientProcedure.callOnboadClientProcedure(details);
-         
-        return "Client created";
+        
+        status.setOnboardStatus("Client Successfull Onboarded!");
+        return status;
+
     }
 }

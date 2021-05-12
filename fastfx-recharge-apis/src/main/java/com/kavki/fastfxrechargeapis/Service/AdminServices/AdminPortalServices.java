@@ -1,10 +1,11 @@
 package com.kavki.fastfxrechargeapis.Service.AdminServices;
 
+import java.lang.reflect.Array;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.List;
+import java.util.*;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -62,23 +63,28 @@ public class AdminPortalServices {
         return tListRepo.calcPending();
     }
 
-    public String verifyPassword(AdminCredentials creds) 
+    public LoginStatus verifyPassword(AdminCredentials credentials) 
         throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException{
-        String Email = creds.getEmail();
-        String Password = creds.getPassword();
-        AdminCredentials credit = loginRepo.findByEmail(Email);
-        if(credit==null)
-            return "Incorrect UserId or Password!";
+        String Email = credentials.getEmail();
+        String Password = credentials.getPassword();
+        AdminCredentials creds = loginRepo.findByEmail(Email);
+        LoginStatus loginStatus = new LoginStatus();
+        if(creds==null){
+          loginStatus.setLoginStatus("Incorrect EmailId or Password!");
+          return loginStatus;
+        }
 
-        String encryptPass = credit.getPassword();
-        String salt = credit.getSalt();
+        String encryptPass = creds.getPassword();
+        String salt = creds.getSalt();
         Encryptor encrypt = new Encryptor();
         String newPass = encrypt.verify(Password, salt); // verifying user password 
         
         if(newPass.equalsIgnoreCase(encryptPass)){
-            return "Logged In!";
+            loginStatus.setLoginStatus("Successfully Logged In!");
+            return loginStatus;
         }else{
-            return "Incorrect UserId or Password";
+            loginStatus.setLoginStatus("Incorrect EmailId or Password!");
+            return loginStatus;
         }
     }
     

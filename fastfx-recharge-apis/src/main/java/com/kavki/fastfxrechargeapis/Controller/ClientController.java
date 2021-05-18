@@ -1,4 +1,4 @@
-package com.kavki.fastfxrechargeapis.Controller.ClientPortal;
+package com.kavki.fastfxrechargeapis.Controller;
 
 
 import java.security.InvalidAlgorithmParameterException;
@@ -9,6 +9,8 @@ import java.security.spec.InvalidKeySpecException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import com.kavki.fastfxrechargeapis.Entity.Admin.LoginStatus;
 import com.kavki.fastfxrechargeapis.Entity.Client.ClientCredentials;
@@ -29,9 +31,9 @@ public class ClientController {
 
     
     @PostMapping("/login")
-    public LoginStatus clientLogin(@RequestBody ClientCredentials credentials) 
+    public LoginStatus clientLogin(@RequestBody ClientCredentials credentials,HttpServletRequest session) 
         throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException{
-        return portalServices.verifyPassword(credentials);
+        return portalServices.verifyPassword(credentials,session);
     }
 
     @PostMapping("/onboard")

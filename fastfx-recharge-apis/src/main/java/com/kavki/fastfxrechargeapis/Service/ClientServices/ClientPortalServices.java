@@ -8,6 +8,9 @@ import java.security.spec.InvalidKeySpecException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.security.auth.message.callback.PrivateKeyCallback.Request;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import com.kavki.fastfxrechargeapis.DAO.ClientRepositories.ClientLoginRepo;
 import com.kavki.fastfxrechargeapis.DTO.Encryptor;
@@ -28,13 +31,14 @@ public class ClientPortalServices {
     @Autowired
     private OnboardClientProcedure clientProcedure;
 
-    public LoginStatus verifyPassword(ClientCredentials creds) 
+    public LoginStatus verifyPassword(ClientCredentials creds, HttpServletRequest request) 
         throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException{
+        HttpSession session = request.getSession();
         String Email = creds.getEmail();
         LoginStatus loginStatus = new LoginStatus();
         ClientCredentials credit = loginRepo.findByEmail(Email);
         if(credit==null){
-            loginStatus.setLoginStatus("Incorrect EmailId or Password!");
+            loginStatus.setLoginStatus("Error");
             return loginStatus;
         }
         
@@ -43,14 +47,19 @@ public class ClientPortalServices {
         String salt = credit.getSalt();
         Encryptor encrypt = new Encryptor();
         String newPass = encrypt.verify(Password, salt);
-        
+        session.setAttribute("client_id",credit.getClientId());
         if(newPass.equalsIgnoreCase(encryptPass)){
-            String clientId = credit.getClientId();
+            String clientId = credit.getClientId();           
             loginStatus.setUserId(clientId);
-            loginStatus.setLoginStatus("Successfully Logged In!");
+            loginStatus.setLoginStatus("Successfull");
+            
+            String id = session.getId();
+            String s = (String) session.getAttribute("client_id");
+            System.out.println(s+" "+id);
+            
             return loginStatus;
         }else{
-            loginStatus.setLoginStatus("Incorrect EmailId or Password!");
+            loginStatus.setLoginStatus("Error");
             return loginStatus;
         }
     }

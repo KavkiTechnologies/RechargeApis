@@ -1,4 +1,4 @@
-package com.kavki.fastfxrechargeapis.Controller.Recharge;
+package com.kavki.fastfxrechargeapis.Controller;
 
 import com.kavki.fastfxrechargeapis.DTO.MobileToDbEntity;
 import com.kavki.fastfxrechargeapis.DTO.TransactionProcedure;

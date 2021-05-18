@@ -1,4 +1,4 @@
-package com.kavki.fastfxrechargeapis.Controller.AdminPortal;
+package com.kavki.fastfxrechargeapis.Controller;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;

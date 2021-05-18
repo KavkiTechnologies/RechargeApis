@@ -10,6 +10,8 @@ import java.util.*;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import com.kavki.fastfxrechargeapis.DAO.AdminRepositories.*;
 import com.kavki.fastfxrechargeapis.DTO.Encryptor;
@@ -70,7 +72,7 @@ public class AdminPortalServices {
         AdminCredentials creds = loginRepo.findByEmail(Email);
         LoginStatus loginStatus = new LoginStatus();
         if(creds==null){
-          loginStatus.setLoginStatus("Incorrect EmailId or Password!");
+          loginStatus.setLoginStatus("Error");
           return loginStatus;
         }
 
@@ -80,10 +82,10 @@ public class AdminPortalServices {
         String newPass = encrypt.verify(Password, salt); // verifying user password 
         
         if(newPass.equalsIgnoreCase(encryptPass)){
-            loginStatus.setLoginStatus("Successfully Logged In!");
+            loginStatus.setLoginStatus("Successfull");
             return loginStatus;
         }else{
-            loginStatus.setLoginStatus("Incorrect EmailId or Password!");
+            loginStatus.setLoginStatus("Error");
             return loginStatus;
         }
     }

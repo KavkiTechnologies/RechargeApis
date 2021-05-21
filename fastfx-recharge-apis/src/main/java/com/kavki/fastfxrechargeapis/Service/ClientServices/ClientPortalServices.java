@@ -4,6 +4,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.List;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -12,10 +13,12 @@ import javax.security.auth.message.callback.PrivateKeyCallback.Request;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.kavki.fastfxrechargeapis.DAO.AdminRepositories.TransactionRepo;
 import com.kavki.fastfxrechargeapis.DAO.ClientRepositories.ClientLoginRepo;
 import com.kavki.fastfxrechargeapis.DTO.Encryptor;
 import com.kavki.fastfxrechargeapis.DTO.OnboardClientProcedure;
 import com.kavki.fastfxrechargeapis.Entity.Admin.LoginStatus;
+import com.kavki.fastfxrechargeapis.Entity.Admin.TransactionEntity;
 import com.kavki.fastfxrechargeapis.Entity.Client.ClientCredentials;
 import com.kavki.fastfxrechargeapis.Entity.Client.OnboardClient;
 import com.kavki.fastfxrechargeapis.Entity.Client.OnboardStatus;
@@ -30,6 +33,8 @@ public class ClientPortalServices {
     private ClientLoginRepo loginRepo;
     @Autowired
     private OnboardClientProcedure clientProcedure;
+    @Autowired
+    private TransactionRepo tListRepo;
 
     public LoginStatus verifyPassword(ClientCredentials creds, HttpServletRequest request) 
         throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException{
@@ -87,5 +92,10 @@ public class ClientPortalServices {
         status.setOnboardStatus("Client Successfull Onboarded!");
         return status;
 
+    }
+
+    public List<TransactionEntity> getclientTransactions(String clientId) {
+        System.out.println("PS:"+clientId);
+        return tListRepo.findByClientId(clientId);
     }
 }

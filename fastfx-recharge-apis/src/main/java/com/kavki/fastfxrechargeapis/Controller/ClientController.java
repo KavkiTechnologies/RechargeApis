@@ -5,6 +5,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.List;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.kavki.fastfxrechargeapis.Entity.Admin.LoginStatus;
+import com.kavki.fastfxrechargeapis.Entity.Admin.TransactionEntity;
 import com.kavki.fastfxrechargeapis.Entity.Client.ClientCredentials;
 import com.kavki.fastfxrechargeapis.Entity.Client.OnboardClient;
 import com.kavki.fastfxrechargeapis.Entity.Client.OnboardStatus;
@@ -29,7 +31,6 @@ public class ClientController {
     @Autowired
     private ClientPortalServices portalServices;
 
-    
     @PostMapping("/login")
     public LoginStatus clientLogin(@RequestBody ClientCredentials credentials,HttpServletRequest session) 
         throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException{
@@ -40,6 +41,12 @@ public class ClientController {
     public OnboardStatus onboardClient(@RequestBody OnboardClient details) 
         throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException{
         return portalServices.createNewClient(details);
-        
+    }
+
+    @GetMapping("/transactions/{clientId}")
+    public List<TransactionEntity> getTransactions(@PathVariable String clientId)
+    {
+        System.out.println(clientId);
+        return portalServices.getclientTransactions(clientId);
     }
 }

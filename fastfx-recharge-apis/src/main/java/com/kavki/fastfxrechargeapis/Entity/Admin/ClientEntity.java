@@ -14,6 +14,8 @@ public class ClientEntity {
     
     
     @Id
+    @Column(name = "Client_Id")
+    private String ClientId;
     @Column(name="S_No")
     private int SL_No;
     @Column(name = "Mobile_No")
@@ -30,6 +32,5 @@ public class ClientEntity {
     private float Balance;
     @Column(name = "Status")
     private String Status;
-    @Column(name = "Client_Id")
-    private String ClientId;
+   
 }

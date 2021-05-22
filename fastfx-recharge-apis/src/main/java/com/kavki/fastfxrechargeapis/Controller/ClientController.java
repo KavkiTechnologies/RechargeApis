@@ -59,6 +59,7 @@ public class ClientController {
     @PostMapping("/loadmoney")
     public void loadMoney(@RequestBody LoadMoney loadMoney){
         portalServices.loadMoneyRequest(loadMoney);
+        portalServices.sendEmail("rawatchetan133@gmail.com", "test smtp",loadMoney);
     }
 
     // @GetMapping(value = "/sendmail")

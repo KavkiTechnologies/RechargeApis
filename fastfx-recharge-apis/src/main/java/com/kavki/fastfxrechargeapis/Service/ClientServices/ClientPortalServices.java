@@ -13,6 +13,7 @@ import javax.security.auth.message.callback.PrivateKeyCallback.Request;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.kavki.fastfxrechargeapis.DAO.AdminRepositories.ClientListRepo;
 import com.kavki.fastfxrechargeapis.DAO.AdminRepositories.TransactionRepo;
 import com.kavki.fastfxrechargeapis.DAO.ClientRepositories.ClientLoginRepo;
 import com.kavki.fastfxrechargeapis.DAO.ClientRepositories.LoadMoneyRepo;
@@ -40,6 +41,8 @@ public class ClientPortalServices  {
     private LoadMoneyRepo loadMoneyRepo;
     @Autowired
     private JavaMailSender javaMailSender;
+    @Autowired
+    private ClientListRepo cListRepo;
     
 
     public LoginStatus verifyPassword(ClientCredentials creds, HttpServletRequest request) 
@@ -64,9 +67,9 @@ public class ClientPortalServices  {
             loginStatus.setUserId(clientId);
             loginStatus.setLoginStatus("Successfull");
             
-            String id = session.getId();
-            String s = (String) session.getAttribute("client_id");
-            System.out.println(s+" "+id);
+            // String id = session.getId();
+            // String s = (String) session.getAttribute("client_id");
+            // System.out.println(s+" "+id);
             
             return loginStatus;
         }else{
@@ -108,18 +111,23 @@ public class ClientPortalServices  {
         return loadMoneyRepo.save(loadMoney);
     }
 
-    public void sendEmail(String to, String subject, LoadMoney body){
+    public void sendEmail(String to, String subject, LoadMoney loadMoney){
 
-        System.out.println("Sending email");
         SimpleMailMessage email = new SimpleMailMessage();
-        String ClientId = body.getClientId();
-        String Amount = body.getAmount();
-        email.setFrom("rawatchetan133@gmail.com");
+        // creating mail body
+        String clientId = loadMoney.getClientId();
+        ClientEntity details = cListRepo.findById(clientId).orElse(null);
+        
+        String body = "ClientId: "+ clientId +"\n" + "Client: " + details.getName() +"\n" + 
+                      "Mobile: "+  details.getMobileNo() +"\n" + "EmailId: " + details.getEmailId() +"\n" + "Current Balance: " + details.getBalance()+"\n\n\n" +
+                      "Money Loaded by Client: "+"\n" +
+                      "Amount: "+loadMoney.getAmount()+"\n" + "Type: "+ loadMoney.getType() + "\n" + "Client Bank: "+ loadMoney.getClientBank()+ "\n" +
+                      "Client Account: " + loadMoney.getClientAccount() + "\n" + "Reference: " + loadMoney.getReference();      
+
         email.setTo(to);
         email.setSubject(subject);
-        email.setText(ClientId+" \n "+Amount);
+        email.setText(body);
         javaMailSender.send(email);
-        System.out.println("sent");
 
     }
 }

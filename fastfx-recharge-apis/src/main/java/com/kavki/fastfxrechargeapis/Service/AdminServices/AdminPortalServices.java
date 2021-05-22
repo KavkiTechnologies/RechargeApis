@@ -10,8 +10,6 @@ import java.util.*;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import com.kavki.fastfxrechargeapis.DAO.AdminRepositories.*;
 import com.kavki.fastfxrechargeapis.DTO.Encryptor;

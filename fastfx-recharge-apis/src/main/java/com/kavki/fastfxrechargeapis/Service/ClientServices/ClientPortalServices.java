@@ -15,26 +15,32 @@ import javax.servlet.http.HttpSession;
 
 import com.kavki.fastfxrechargeapis.DAO.AdminRepositories.TransactionRepo;
 import com.kavki.fastfxrechargeapis.DAO.ClientRepositories.ClientLoginRepo;
+import com.kavki.fastfxrechargeapis.DAO.ClientRepositories.LoadMoneyRepo;
 import com.kavki.fastfxrechargeapis.DTO.Encryptor;
 import com.kavki.fastfxrechargeapis.DTO.OnboardClientProcedure;
-import com.kavki.fastfxrechargeapis.Entity.Admin.LoginStatus;
-import com.kavki.fastfxrechargeapis.Entity.Admin.TransactionEntity;
-import com.kavki.fastfxrechargeapis.Entity.Client.ClientCredentials;
-import com.kavki.fastfxrechargeapis.Entity.Client.OnboardClient;
-import com.kavki.fastfxrechargeapis.Entity.Client.OnboardStatus;
+import com.kavki.fastfxrechargeapis.Entity.Admin.*;
+import com.kavki.fastfxrechargeapis.Entity.Client.*;
 
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ClientPortalServices {
+public class ClientPortalServices  {
     
+  
     @Autowired
     private ClientLoginRepo loginRepo;
     @Autowired
     private OnboardClientProcedure clientProcedure;
     @Autowired
     private TransactionRepo tListRepo;
+    @Autowired
+    private LoadMoneyRepo loadMoneyRepo;
+    @Autowired
+    private JavaMailSender javaMailSender;
+    
 
     public LoginStatus verifyPassword(ClientCredentials creds, HttpServletRequest request) 
         throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException{
@@ -95,7 +101,25 @@ public class ClientPortalServices {
     }
 
     public List<TransactionEntity> getclientTransactions(String clientId) {
-        System.out.println("PS:"+clientId);
         return tListRepo.findByClientId(clientId);
+    }
+
+    public LoadMoney loadMoneyRequest(LoadMoney loadMoney) {
+        return loadMoneyRepo.save(loadMoney);
+    }
+
+    public void sendEmail(String to, String subject, LoadMoney body){
+
+        System.out.println("Sending email");
+        SimpleMailMessage email = new SimpleMailMessage();
+        String ClientId = body.getClientId();
+        String Amount = body.getAmount();
+        email.setFrom("rawatchetan133@gmail.com");
+        email.setTo(to);
+        email.setSubject(subject);
+        email.setText(ClientId+" \n "+Amount);
+        javaMailSender.send(email);
+        System.out.println("sent");
+
     }
 }

@@ -1,5 +1,7 @@
 package com.kavki.fastfxrechargeapis.Controller;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -16,11 +18,13 @@ import javax.servlet.http.HttpSession;
 import com.kavki.fastfxrechargeapis.Entity.Admin.LoginStatus;
 import com.kavki.fastfxrechargeapis.Entity.Admin.TransactionEntity;
 import com.kavki.fastfxrechargeapis.Entity.Client.ClientCredentials;
+import com.kavki.fastfxrechargeapis.Entity.Client.LoadMoney;
 import com.kavki.fastfxrechargeapis.Entity.Client.OnboardClient;
 import com.kavki.fastfxrechargeapis.Entity.Client.OnboardStatus;
 import com.kavki.fastfxrechargeapis.Service.ClientServices.ClientPortalServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -30,6 +34,9 @@ public class ClientController {
     
     @Autowired
     private ClientPortalServices portalServices;
+    @Autowired
+    private JavaMailSender emailSender;
+    
 
     @PostMapping("/login")
     public LoginStatus clientLogin(@RequestBody ClientCredentials credentials,HttpServletRequest session) 
@@ -46,7 +53,20 @@ public class ClientController {
     @GetMapping("/transactions/{clientId}")
     public List<TransactionEntity> getTransactions(@PathVariable String clientId)
     {
-        System.out.println(clientId);
         return portalServices.getclientTransactions(clientId);
     }
+
+    @PostMapping("/loadmoney")
+    public void loadMoney(@RequestBody LoadMoney loadMoney){
+        portalServices.loadMoneyRequest(loadMoney);
+    }
+
+    // @GetMapping(value = "/sendmail")
+    // public String sendmail() {
+    //     portalServices.sendEmail("rawatchetan133@gmail.com", "test smtp", "successfull");
+
+    //     return "emailsent";
+    // }
+
+
 }

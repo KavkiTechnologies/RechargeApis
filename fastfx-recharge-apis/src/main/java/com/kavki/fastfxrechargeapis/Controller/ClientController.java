@@ -39,15 +39,16 @@ public class ClientController {
     
 
     @PostMapping("/login")
-    public LoginStatus clientLogin(@RequestBody ClientCredentials credentials,HttpServletRequest session) 
+    public LoginStatus clientLogin(@RequestBody ClientCredentials credentials) 
         throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException{
-        return portalServices.verifyPassword(credentials,session);
+        return portalServices.verifyPassword(credentials);
     }
 
     @PostMapping("/onboard")
     public OnboardStatus onboardClient(@RequestBody OnboardClient details) 
         throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException{
-        return portalServices.createNewClient(details);
+        System.out.println("details: "+details);
+            return portalServices.createNewClient(details);
     }
 
     @GetMapping("/transactions/{clientId}")

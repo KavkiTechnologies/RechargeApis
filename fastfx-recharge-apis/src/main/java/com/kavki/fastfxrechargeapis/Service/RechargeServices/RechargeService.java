@@ -23,7 +23,7 @@ public class RechargeService {
     @Autowired
 	private Environment env;
 
-    private static String baseUrl = "https://sandbox.rechargkit.biz/get/";
+    private static String baseUrl = "https://rechargkit.biz/get/";
 
     public MobileResponse prepaidRecharge(MobileRecharge rechargeObj){
 
@@ -45,7 +45,7 @@ public class RechargeService {
             .queryParam("user_var1",rechargeObj.getUser_var1());
 
             //Consuming Recharge API for GET 
-          //  System.out.println("URL: "+uriBuilder.toUriString());
+           System.out.println("URL: "+uriBuilder.toUriString());
             ResponseEntity<String> responseUser = restTemplate.exchange(uriBuilder.toUriString() ,
                     HttpMethod.GET,
                     null,

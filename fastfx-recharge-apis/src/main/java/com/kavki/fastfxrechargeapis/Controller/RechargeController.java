@@ -45,9 +45,10 @@ public class RechargeController {
         responseParams = apiService.postpaidRecharge(postpaidParams);
         MobileParamsMapping mapper = new MobileParamsMapping();
         MobileToDbEntity db =  mapper.mobileEntityMappingForDb(postpaidParams, responseParams);
-        db.setUSERVAR3("postpaid");
+        db.setServiceType("prepaid");
+        DateGenerator date = new DateGenerator();
+        db.setTransDate(date.getTimeStamp());
         System.out.println("DB: "+db);
-        System.out.println("calling trans");
         tProcedure.callTransactionProcedure(db);
         System.out.println("done trans");
         // dbService.saveTransaction(db);

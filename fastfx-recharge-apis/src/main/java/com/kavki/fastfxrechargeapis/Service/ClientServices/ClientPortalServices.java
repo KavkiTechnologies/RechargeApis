@@ -9,9 +9,6 @@ import java.util.List;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.security.auth.message.callback.PrivateKeyCallback.Request;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import com.kavki.fastfxrechargeapis.DAO.AdminRepositories.ClientListRepo;
 import com.kavki.fastfxrechargeapis.DAO.AdminRepositories.TransactionRepo;
@@ -45,9 +42,8 @@ public class ClientPortalServices  {
     private ClientListRepo cListRepo;
     
 
-    public LoginStatus verifyPassword(ClientCredentials creds, HttpServletRequest request) 
+    public LoginStatus verifyPassword(ClientCredentials creds) 
         throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException{
-        HttpSession session = request.getSession();
         String Email = creds.getEmail();
         LoginStatus loginStatus = new LoginStatus();
         ClientCredentials credit = loginRepo.findByEmail(Email);
@@ -61,16 +57,11 @@ public class ClientPortalServices  {
         String salt = credit.getSalt();
         Encryptor encrypt = new Encryptor();
         String newPass = encrypt.verify(Password, salt);
-        session.setAttribute("client_id",credit.getClientId());
+
         if(newPass.equalsIgnoreCase(encryptPass)){
             String clientId = credit.getClientId();           
             loginStatus.setUserId(clientId);
-            loginStatus.setLoginStatus("Successfull");
-            
-            // String id = session.getId();
-            // String s = (String) session.getAttribute("client_id");
-            // System.out.println(s+" "+id);
-            
+            loginStatus.setLoginStatus("Successfull");            
             return loginStatus;
         }else{
             loginStatus.setLoginStatus("Error");
@@ -81,7 +72,7 @@ public class ClientPortalServices  {
     public OnboardStatus createNewClient(OnboardClient details) 
         throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException {
         String Email = details.getEmail();
-
+        
         OnboardStatus status = new OnboardStatus();
         ClientCredentials creds = loginRepo.findByEmail(Email);
         if(creds!=null && Email.equalsIgnoreCase(creds.getEmail())){
@@ -96,6 +87,7 @@ public class ClientPortalServices  {
 
         details.setPassword(clientCredentials[0]); // index 0 -> encrypted pass 
         details.setSalt(clientCredentials[1]);     // index 1 -> encrypted salt
+        System.out.println("DE: "+details);
         clientProcedure.callOnboadClientProcedure(details);
         
         status.setOnboardStatus("Client Successfull Onboarded!");

@@ -23,22 +23,39 @@ public class RechargeController {
 
     
     @PostMapping("/prepaid")
-    public String doPrepaidRecharge(@RequestBody MobileRecharge requestParams){      
+    public MobileResponse doPrepaidRecharge(@RequestBody MobileRecharge requestParams){      
         MobileResponse responseParams = new MobileResponse();
         responseParams = apiService.prepaidRecharge(requestParams);
+        System.out.println("Response: "+responseParams);
         MobileParamsMapping mapper = new MobileParamsMapping();
         MobileToDbEntity db =  mapper.mobileEntityMappingForDb(requestParams, responseParams);
+        DateGenerator date = new DateGenerator();
+        db.setServiceType("prepaid");
+        db.setTransDate(date.getTimeStamp());
+        System.out.println("DB: "+db);
         tProcedure.callTransactionProcedure(db);
         // dbService.saveTransaction(db);
-        return responseParams.getMESSAGE();
+        return responseParams;
     }
 
-    @GetMapping("/postpaid")
+    @PostMapping("/postpaid")
     public MobileResponse doPostpaidRecharge(@RequestBody MobileRecharge postpaidParams){
-        return apiService.postpaidRecharge(postpaidParams);
+      //  return apiService.postpaidRecharge(postpaidParams);
+        MobileResponse responseParams = new MobileResponse();
+        responseParams = apiService.postpaidRecharge(postpaidParams);
+        MobileParamsMapping mapper = new MobileParamsMapping();
+        MobileToDbEntity db =  mapper.mobileEntityMappingForDb(postpaidParams, responseParams);
+        db.setUSERVAR3("postpaid");
+        System.out.println("DB: "+db);
+        System.out.println("calling trans");
+        tProcedure.callTransactionProcedure(db);
+        System.out.println("done trans");
+        // dbService.saveTransaction(db);
+     //   return responseParams.getMESSAGE();
+     return responseParams;
     }
 
-    @GetMapping("/dth")
+    @PostMapping("/dth")
     public DthResponse doDTHRecharge(@RequestBody DthRecharge dthParams){
         return apiService.dthRecharge(dthParams);
     }

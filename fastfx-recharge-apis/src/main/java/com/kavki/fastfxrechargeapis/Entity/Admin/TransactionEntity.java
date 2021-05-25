@@ -23,6 +23,8 @@ public class TransactionEntity {
     private String ClientId;
     @Column(name= "Operator_Name", nullable = false)
     private String OperatorName;
+    @Column(name="Service_Type", nullable=false)
+    private String ServiceType;
     @Column(name= "Tranx_date", nullable = false)
     private String TranxDate;
     @Column(name= "Updated_Tranx_date", nullable = false)

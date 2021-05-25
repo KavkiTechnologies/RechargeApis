@@ -57,17 +57,11 @@ public class ClientController {
     }
 
     @PostMapping("/loadmoney")
-    public void loadMoney(@RequestBody LoadMoney loadMoney){
+    public String loadMoney(@RequestBody LoadMoney loadMoney){
         portalServices.loadMoneyRequest(loadMoney);
-        portalServices.sendEmail("rawatchetan133@gmail.com", "test smtp",loadMoney);
+        portalServices.sendEmail("rawatchetan133@gmail.com", "Prefund Uploaded",loadMoney);
+        return "Thankyou, Details Uploaded Successfully!";
     }
-
-    // @GetMapping(value = "/sendmail")
-    // public String sendmail() {
-    //     portalServices.sendEmail("rawatchetan133@gmail.com", "test smtp", "successfull");
-
-    //     return "emailsent";
-    // }
 
 
 }

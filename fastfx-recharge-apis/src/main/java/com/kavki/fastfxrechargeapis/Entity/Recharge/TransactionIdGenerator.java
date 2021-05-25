@@ -11,7 +11,6 @@ public class TransactionIdGenerator {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         LocalDateTime now = LocalDateTime.now();
         String date = dtf.format(now);
-        
         String TransId = prefix+date+circleCode+operatorCode;
         return TransId;
     }

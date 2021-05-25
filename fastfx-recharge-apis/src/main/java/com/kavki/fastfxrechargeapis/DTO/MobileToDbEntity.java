@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "prepaid_Service")
-@Entity(name="prepaid_service")
+@Table(name = "recharge_service")
+@Entity(name="recharge_service")
 @NamedStoredProcedureQuery(
     name = "transactionsP",
     procedureName = "transactionsP",
@@ -21,11 +21,13 @@ import lombok.NoArgsConstructor;
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="amount",type= Integer.class),
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="circle",type= Integer.class),
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="rechargeType",type= String.class),
+                  @StoredProcedureParameter(mode=ParameterMode.IN,name="serviceType",type= String.class),
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="errorCode",type= Integer.class),
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="statusCode",type= Integer.class),
-                  @StoredProcedureParameter(mode=ParameterMode.IN,name="orderID",type= Integer.class),
+                  @StoredProcedureParameter(mode=ParameterMode.IN,name="orderId",type= Integer.class),
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="optransId",type= Long.class),
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="message",type= String.class),
+                  @StoredProcedureParameter(mode=ParameterMode.IN,name="transDate",type= String.class),
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="commission",type= String.class),
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="userVal2",type= String.class),
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="userVal3",type= String.class)})
@@ -47,6 +49,8 @@ public class MobileToDbEntity {
     private int circle;
     @Column(name="recharge_type")
     private String rechargeType;
+    @Column(name="service_type")
+    private String serviceType;
     @Column(name = "error_code")
     private int eRROR;
     @Column(name = "status_code")
@@ -55,6 +59,8 @@ public class MobileToDbEntity {
     private long optransId;
     @Column(name="message")
     private String message;
+    @Column(name="tranx_date")
+    private String transDate;
     @Column(name="commission")
     private String commission;
     @Column(name ="client_id")

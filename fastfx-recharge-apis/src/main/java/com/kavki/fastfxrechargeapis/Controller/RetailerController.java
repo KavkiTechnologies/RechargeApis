@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.kavki.fastfxrechargeapis.Entity.Admin.LoginStatus;
+import com.kavki.fastfxrechargeapis.Entity.Admin.TransactionEntity;
 import com.kavki.fastfxrechargeapis.Entity.Client.OnboardStatus;
 import com.kavki.fastfxrechargeapis.Entity.Retailer.OnboardRetailer;
 import com.kavki.fastfxrechargeapis.Entity.Retailer.RetailerCredentials;
@@ -46,4 +47,8 @@ public class RetailerController {
         return portalServices.verifyPassword(credentials);
     }
     
+    @GetMapping("/transactions/{retailerId}")
+    public List<TransactionEntity> getRetailerTransactions(@PathVariable String retailerId){
+        return portalServices.getTransaction(retailerId);
+    }
 }

@@ -21,6 +21,8 @@ public class TransactionEntity {
     private String Client;
     @Column(name= "Client_ID", nullable = false)
     private String ClientId;
+    @Column(name="Retailer_Id")
+    private String RetailerId;
     @Column(name= "Operator_Name", nullable = false)
     private String OperatorName;
     @Column(name="Service_Type", nullable=false)

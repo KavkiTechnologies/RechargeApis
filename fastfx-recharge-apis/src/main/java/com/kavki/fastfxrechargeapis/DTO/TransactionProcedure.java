@@ -30,7 +30,7 @@ public class TransactionProcedure {
                                                     .setParameter("message", db.getMessage())
                                                     .setParameter("transDate",db.getTransDate())
                                                     .setParameter("commission", db.getCommission())
-                                                    .setParameter("userVal2", db.getUSERVAR2())
+                                                    .setParameter("retailerId", db.getUSERVAR2())
                                                     .setParameter("userVal3", db.getUSERVAR3()).execute();
     }
 

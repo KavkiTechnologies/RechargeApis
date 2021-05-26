@@ -13,6 +13,7 @@ import javax.crypto.NoSuchPaddingException;
 import com.kavki.fastfxrechargeapis.DAO.AdminRepositories.ClientListRepo;
 import com.kavki.fastfxrechargeapis.DAO.AdminRepositories.TransactionRepo;
 import com.kavki.fastfxrechargeapis.DAO.ClientRepositories.ClientLoginRepo;
+import com.kavki.fastfxrechargeapis.DAO.ClientRepositories.ClientPaymentSummeryRepo;
 import com.kavki.fastfxrechargeapis.DAO.ClientRepositories.LoadMoneyRepo;
 import com.kavki.fastfxrechargeapis.DTO.Encryptor;
 import com.kavki.fastfxrechargeapis.DTO.OnboardClientProcedure;
@@ -40,6 +41,8 @@ public class ClientPortalServices  {
     private JavaMailSender javaMailSender;
     @Autowired
     private ClientListRepo cListRepo;
+    @Autowired
+    private ClientPaymentSummeryRepo summeryRepo;
     
 
     public LoginStatus verifyPassword(ClientCredentials creds) 
@@ -121,5 +124,9 @@ public class ClientPortalServices  {
         email.setText(body);
         javaMailSender.send(email);
 
+    }
+
+    public List<LoadMoney> getSummery() {
+        return summeryRepo.findAll();
     }
 }

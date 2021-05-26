@@ -25,5 +25,7 @@ public class RetailerCredentials {
     private String salt;
     @Column(name="Retailer_Id")
     private String retailerId;
+    @Column(name="Client_Id")
+    private String clientId;
     
 }

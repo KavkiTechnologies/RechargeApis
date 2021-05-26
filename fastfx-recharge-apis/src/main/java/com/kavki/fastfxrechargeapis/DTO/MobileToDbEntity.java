@@ -29,7 +29,7 @@ import lombok.NoArgsConstructor;
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="message",type= String.class),
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="transDate",type= String.class),
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="commission",type= String.class),
-                  @StoredProcedureParameter(mode=ParameterMode.IN,name="userVal2",type= String.class),
+                  @StoredProcedureParameter(mode=ParameterMode.IN,name="retailerId",type= String.class),
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="userVal3",type= String.class)})
 
 public class MobileToDbEntity {
@@ -65,7 +65,7 @@ public class MobileToDbEntity {
     private String commission;
     @Column(name ="client_id")
     private String uSERVAR1;
-    @Column(name ="user_val2")
+    @Column(name ="retailer_Id")
     private String uSERVAR2;
     @Column(name ="user_val3")
     private String uSERVAR3;

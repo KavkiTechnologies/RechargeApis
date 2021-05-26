@@ -21,6 +21,9 @@ public interface TransactionRepo extends JpaRepository<TransactionEntity, String
 
     @Query("select t from transaction_details t where t.ClientId =:cId")
     List<TransactionEntity> findByClientId(@Param("cId") String clientId);
+
+    @Query("select t from transaction_details t where t.RetailerId =:rId")
+    List<TransactionEntity> findByRetailerId(@Param("rId") String retailerId);
     
 
     

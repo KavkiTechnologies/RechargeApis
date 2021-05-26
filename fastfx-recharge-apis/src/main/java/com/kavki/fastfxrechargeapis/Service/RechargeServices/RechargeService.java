@@ -1,6 +1,7 @@
 package com.kavki.fastfxrechargeapis.Service.RechargeServices;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kavki.fastfxrechargeapis.DAO.RetailerRepositories.RetailerLoginRepo;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.DthRecharge;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.DthResponse;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.MobileRecharge;
@@ -22,15 +23,25 @@ public class RechargeService {
     private RestTemplate restTemplate;
     @Autowired
 	private Environment env;
+    @Autowired
+    private RetailerLoginRepo rLoginRepo;
 
-    private static String baseUrl = "https://rechargkit.biz/get/";
+    private static String baseUrl = "https://sandbox.rechargkit.biz/get/";
 
     public MobileResponse prepaidRecharge(MobileRecharge rechargeObj){
 
         try{
             String new_url = baseUrl + "prepaid/mobile";
-            // genertaing transaction Id
-            String transId = new TransactionIdGenerator().generateTransId(rechargeObj.getUser_var1(),rechargeObj.getOperator_code(), rechargeObj.getCircle());
+            String clientId, transId;
+            // genertaing transaction Id 
+            if(rechargeObj.getRetailerId() != null){
+                clientId = rLoginRepo.findByRetailerId(rechargeObj.getRetailerId());
+                rechargeObj.setClientId(clientId);
+                transId = new TransactionIdGenerator().generateTransId(rechargeObj.getRetailerId(),rechargeObj.getOperator_code(), rechargeObj.getCircle());
+            }
+            else{
+                transId = new TransactionIdGenerator().generateTransId(rechargeObj.getClientId(),rechargeObj.getOperator_code(), rechargeObj.getCircle());
+            }
 
             UriComponentsBuilder uriBuilder  = UriComponentsBuilder.fromUriString(new_url)
             // Add query parameter to url
@@ -42,10 +53,11 @@ public class RechargeService {
             .queryParam("partner_request_id", transId)
             .queryParam("circle", rechargeObj.getCircle())
             .queryParam("recharge_type", rechargeObj.getRecharge_type())
-            .queryParam("user_var1",rechargeObj.getUser_var1());
+            .queryParam("user_var1",rechargeObj.getClientId())
+            .queryParam("user_var2",rechargeObj.getRetailerId());
 
             //Consuming Recharge API for GET 
-           System.out.println("URL: "+uriBuilder.toUriString());
+            System.out.println("URL: "+uriBuilder.toUriString());
             ResponseEntity<String> responseUser = restTemplate.exchange(uriBuilder.toUriString() ,
                     HttpMethod.GET,
                     null,
@@ -66,7 +78,7 @@ public class RechargeService {
         try{
             String new_url = baseUrl + "postpaid/mobile";
             // generating transacionId
-            String transId = new TransactionIdGenerator().generateTransId(rechargeObj.getUser_var1(),rechargeObj.getOperator_code(), rechargeObj.getCircle());
+            String transId = new TransactionIdGenerator().generateTransId(rechargeObj.getClientId(),rechargeObj.getOperator_code(), rechargeObj.getCircle());
             UriComponentsBuilder uriBuilder  = UriComponentsBuilder.fromUriString(new_url)
             // Add query parameter to url 
             .queryParam("partner_id", env.getProperty("fastfx.partner_id"))
@@ -77,7 +89,7 @@ public class RechargeService {
             .queryParam("partner_request_id", transId)
             .queryParam("circle", rechargeObj.getCircle())
             .queryParam("recharge_type", rechargeObj.getRecharge_type())
-            .queryParam("user_var1",rechargeObj.getUser_var1());
+            .queryParam("user_var1",rechargeObj.getClientId());
 
             //Consuming Recharge API for GET 
             ResponseEntity<String> responseUser = restTemplate.exchange(uriBuilder.toUriString() ,

@@ -10,10 +10,12 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-import com.kavki.fastfxrechargeapis.DAO.RechargeRepositories.RetailerLoginRepo;
+import com.kavki.fastfxrechargeapis.DAO.AdminRepositories.TransactionRepo;
+import com.kavki.fastfxrechargeapis.DAO.RetailerRepositories.RetailerLoginRepo;
 import com.kavki.fastfxrechargeapis.DTO.Encryptor;
 import com.kavki.fastfxrechargeapis.DTO.OnboardRetailerProcedure;
 import com.kavki.fastfxrechargeapis.Entity.Admin.LoginStatus;
+import com.kavki.fastfxrechargeapis.Entity.Admin.TransactionEntity;
 import com.kavki.fastfxrechargeapis.Entity.Client.OnboardStatus;
 import com.kavki.fastfxrechargeapis.Entity.Retailer.OnboardRetailer;
 import com.kavki.fastfxrechargeapis.Entity.Retailer.RetailerCredentials;
@@ -29,11 +31,13 @@ public class RetailerPortalServices {
     private RetailerLoginRepo loginRepo;
     @Autowired
     private OnboardRetailerProcedure retailerProcedure;
+    @Autowired
+    private TransactionRepo tListRepo;
 
     public OnboardStatus createNewRetailer(OnboardRetailer details)     
         throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException {
         String Email = details.getEmail();
-        System.out.println("before d: "+details);
+       // System.out.println("before d: "+details);
         OnboardStatus status = new OnboardStatus();
         RetailerCredentials creds = loginRepo.findByEmail(Email);
         if(creds!=null && Email.equalsIgnoreCase(creds.getEmail())){
@@ -47,7 +51,7 @@ public class RetailerPortalServices {
 
         details.setPassword(clientCredentials[0]); // index 0 -> encrypted pass 
         details.setSalt(clientCredentials[1]);     // index 1 -> encrypted salt
-        System.out.println("After d: "+details);
+       // System.out.println("After d: "+details);
         retailerProcedure.callOnboadRetailerProcedure(details);
         
         status.setOnboardStatus("Retailer Successfull Onboarded!");
@@ -81,4 +85,8 @@ public class RetailerPortalServices {
                 return loginStatus;
             }
         }
+
+    public List<TransactionEntity> getTransaction(String retailerId) {
+        return tListRepo.findByRetailerId(retailerId);
+    }
 }

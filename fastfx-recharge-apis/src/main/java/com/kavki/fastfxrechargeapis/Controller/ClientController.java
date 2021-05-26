@@ -21,6 +21,7 @@ import com.kavki.fastfxrechargeapis.Entity.Client.ClientCredentials;
 import com.kavki.fastfxrechargeapis.Entity.Client.LoadMoney;
 import com.kavki.fastfxrechargeapis.Entity.Client.OnboardClient;
 import com.kavki.fastfxrechargeapis.Entity.Client.OnboardStatus;
+import com.kavki.fastfxrechargeapis.Entity.Recharge.DateGenerator;
 import com.kavki.fastfxrechargeapis.Service.ClientServices.ClientPortalServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,10 +60,17 @@ public class ClientController {
 
     @PostMapping("/loadmoney")
     public String loadMoney(@RequestBody LoadMoney loadMoney){
+        DateGenerator date = new DateGenerator();
+        loadMoney.setReqDate(date.getTimeStamp());
+        System.out.println("Load: "+loadMoney);
         portalServices.loadMoneyRequest(loadMoney);
         portalServices.sendEmail("rawatchetan133@gmail.com", "Prefund Uploaded",loadMoney);
         return "Thankyou, Details Uploaded Successfully!";
     }
 
+    @GetMapping("/paymentsummery")
+    public List<LoadMoney> getPaymentSummery(){
+        return portalServices.getSummery();
+    }
 
 }

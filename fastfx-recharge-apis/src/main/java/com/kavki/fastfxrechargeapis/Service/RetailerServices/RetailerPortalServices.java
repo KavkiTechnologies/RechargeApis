@@ -11,11 +11,14 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 import com.kavki.fastfxrechargeapis.DAO.AdminRepositories.TransactionRepo;
+import com.kavki.fastfxrechargeapis.DAO.ClientRepositories.LoadMoneyRepo;
+import com.kavki.fastfxrechargeapis.DAO.ClientRepositories.PaymentSummeryRepo;
 import com.kavki.fastfxrechargeapis.DAO.RetailerRepositories.RetailerLoginRepo;
 import com.kavki.fastfxrechargeapis.DTO.Encryptor;
 import com.kavki.fastfxrechargeapis.DTO.OnboardRetailerProcedure;
 import com.kavki.fastfxrechargeapis.Entity.Admin.LoginStatus;
 import com.kavki.fastfxrechargeapis.Entity.Admin.TransactionEntity;
+import com.kavki.fastfxrechargeapis.Entity.Client.LoadMoney;
 import com.kavki.fastfxrechargeapis.Entity.Client.OnboardStatus;
 import com.kavki.fastfxrechargeapis.Entity.Retailer.OnboardRetailer;
 import com.kavki.fastfxrechargeapis.Entity.Retailer.RetailerCredentials;
@@ -33,7 +36,11 @@ public class RetailerPortalServices {
     private OnboardRetailerProcedure retailerProcedure;
     @Autowired
     private TransactionRepo tListRepo;
-
+    @Autowired
+    private PaymentSummeryRepo summeryRepo;
+    @Autowired
+    private LoadMoneyRepo loadMoneyRepo;
+    
     public OnboardStatus createNewRetailer(OnboardRetailer details)     
         throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException {
         String Email = details.getEmail();
@@ -89,4 +96,16 @@ public class RetailerPortalServices {
     public List<TransactionEntity> getTransaction(String retailerId) {
         return tListRepo.findByRetailerId(retailerId);
     }
+
+    public List<LoadMoney> getSummery(String retailerId) {
+        return summeryRepo.findByRetailerId(retailerId);
+    }
+
+    public LoadMoney loadMoneyRequest(LoadMoney loadMoney){
+        String clientId = loginRepo.findByRetailerId(loadMoney.getRetailerId());
+        loadMoney.setClientId(clientId);
+        return loadMoneyRepo.save(loadMoney);
+    }
+
+
 }

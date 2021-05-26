@@ -68,9 +68,9 @@ public class ClientController {
         return "Thankyou, Details Uploaded Successfully!";
     }
 
-    @GetMapping("/paymentsummery")
-    public List<LoadMoney> getPaymentSummery(){
-        return portalServices.getSummery();
+    @GetMapping("/paymentsummery/{clientId}")
+    public List<LoadMoney> getPaymentSummery(@PathVariable String clientId){
+        return portalServices.getSummery(clientId);
     }
 
 }

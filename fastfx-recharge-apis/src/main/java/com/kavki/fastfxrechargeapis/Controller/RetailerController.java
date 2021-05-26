@@ -16,7 +16,9 @@ import javax.servlet.http.HttpSession;
 
 import com.kavki.fastfxrechargeapis.Entity.Admin.LoginStatus;
 import com.kavki.fastfxrechargeapis.Entity.Admin.TransactionEntity;
+import com.kavki.fastfxrechargeapis.Entity.Client.LoadMoney;
 import com.kavki.fastfxrechargeapis.Entity.Client.OnboardStatus;
+import com.kavki.fastfxrechargeapis.Entity.Recharge.DateGenerator;
 import com.kavki.fastfxrechargeapis.Entity.Retailer.OnboardRetailer;
 import com.kavki.fastfxrechargeapis.Entity.Retailer.RetailerCredentials;
 import com.kavki.fastfxrechargeapis.Service.RetailerServices.RetailerPortalServices;
@@ -50,5 +52,20 @@ public class RetailerController {
     @GetMapping("/transactions/{retailerId}")
     public List<TransactionEntity> getRetailerTransactions(@PathVariable String retailerId){
         return portalServices.getTransaction(retailerId);
+    }
+
+    @GetMapping("/paymentsummery/{retailerId}")
+    public List<LoadMoney> getPaymentSummery(@PathVariable String retailerId){
+        return portalServices.getSummery(retailerId);
+    }
+
+    @PostMapping("/loadmoney")
+    public String loadMoney(@RequestBody LoadMoney loadMoney){
+        DateGenerator date = new DateGenerator();
+        loadMoney.setReqDate(date.getTimeStamp());
+        System.out.println("Load: "+loadMoney);
+        portalServices.loadMoneyRequest(loadMoney);
+        //portalServices.sendEmail("rawatchetan133@gmail.com", "Prefund Uploaded",loadMoney);
+        return "Thankyou, Details Uploaded Successfully!";
     }
 }

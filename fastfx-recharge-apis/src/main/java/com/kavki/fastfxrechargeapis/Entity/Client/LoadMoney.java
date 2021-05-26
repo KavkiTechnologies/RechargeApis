@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "client_load_money")
-@Table(name = "client_load_money")
+@Entity(name = "load_money")
+@Table(name = "load_money")
 public class LoadMoney {
     
     @Id
@@ -25,6 +25,8 @@ public class LoadMoney {
     private int slno;
     @Column(name="Client_Id")
     private String clientId;
+    @Column(name="Retailer_Id")
+    private  String retailerId;
     @Column(name="Request_Date")
     private String reqDate;
     @Column(name= "Amount")

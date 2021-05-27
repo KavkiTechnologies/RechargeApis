@@ -120,10 +120,6 @@ public class AdminPortalServices {
             updatePrefund.setStatus("rejected");
             summeryRepo.save(updatePrefund);
         }
-      
-
     }
 
-   
-    
 }

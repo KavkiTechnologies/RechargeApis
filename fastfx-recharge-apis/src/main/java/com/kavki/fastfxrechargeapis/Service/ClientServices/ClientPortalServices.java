@@ -129,4 +129,9 @@ public class ClientPortalServices  {
     public List<LoadMoney> getSummery(String clientId) {
         return summeryRepo.findByClientId(clientId);
     }
+
+    public String getWalletBalance(String clientId) {
+        String balance = cListRepo.getWalletBalance(clientId);
+        return balance;
+    }
 }

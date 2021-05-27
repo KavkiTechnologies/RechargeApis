@@ -1,4 +1,4 @@
-package com.kavki.fastfxrechargeapis.Entity.Admin;
+package com.kavki.fastfxrechargeapis.Entity.Recharge;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

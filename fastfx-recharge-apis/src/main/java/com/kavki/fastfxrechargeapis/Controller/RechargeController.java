@@ -2,7 +2,6 @@ package com.kavki.fastfxrechargeapis.Controller;
 
 import com.kavki.fastfxrechargeapis.DTO.MobileToDbEntity;
 import com.kavki.fastfxrechargeapis.DTO.TransactionProcedure;
-import com.kavki.fastfxrechargeapis.Entity.Admin.RkitWalletBalance;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.*;
 import com.kavki.fastfxrechargeapis.ParamsMapping.MobileParamsMapping;
 import com.kavki.fastfxrechargeapis.Service.RechargeServices.*;

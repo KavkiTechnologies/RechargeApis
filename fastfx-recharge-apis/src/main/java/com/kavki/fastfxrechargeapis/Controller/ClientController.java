@@ -73,4 +73,8 @@ public class ClientController {
         return portalServices.getSummery(clientId);
     }
 
+    @GetMapping("/fastxbalance/{clientId}")
+    public String getFastfxBalance(@PathVariable String clientId){
+        return portalServices.getWalletBalance(clientId);
+    }
 }

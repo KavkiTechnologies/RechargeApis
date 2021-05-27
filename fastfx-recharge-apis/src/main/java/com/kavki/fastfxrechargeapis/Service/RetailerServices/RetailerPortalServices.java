@@ -10,6 +10,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
+import com.kavki.fastfxrechargeapis.DAO.AdminRepositories.RetailerListRepo;
 import com.kavki.fastfxrechargeapis.DAO.AdminRepositories.TransactionRepo;
 import com.kavki.fastfxrechargeapis.DAO.ClientRepositories.LoadMoneyRepo;
 import com.kavki.fastfxrechargeapis.DAO.ClientRepositories.PaymentSummeryRepo;
@@ -40,6 +41,8 @@ public class RetailerPortalServices {
     private PaymentSummeryRepo summeryRepo;
     @Autowired
     private LoadMoneyRepo loadMoneyRepo;
+    @Autowired
+    private RetailerListRepo rListRepo;
     
     public OnboardStatus createNewRetailer(OnboardRetailer details)     
         throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException {
@@ -107,6 +110,11 @@ public class RetailerPortalServices {
         System.out.println("calling client "+clientId);
         return loadMoneyRepo.save(loadMoney);
     }
+
+    public String getWalletBalance(String retailerId) {
+       String balance = rListRepo.getWalletBalance(retailerId);
+       return balance;
+   }
 
 
 }

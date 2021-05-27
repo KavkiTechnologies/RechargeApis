@@ -104,6 +104,7 @@ public class RetailerPortalServices {
     public LoadMoney loadMoneyRequest(LoadMoney loadMoney){
         String clientId = loginRepo.findByRetailerId(loadMoney.getRetailerId());
         loadMoney.setClientId(clientId);
+        System.out.println("calling client "+clientId);
         return loadMoneyRepo.save(loadMoney);
     }
 

@@ -26,7 +26,7 @@ public class RechargeService {
     @Autowired
     private RetailerLoginRepo rLoginRepo;
 
-    private static String baseUrl = "https://sandbox.rechargkit.biz/get/";
+    private static String baseUrl = "https://rechargkit.biz/get/";
 
     public MobileResponse prepaidRecharge(MobileRecharge rechargeObj){
 

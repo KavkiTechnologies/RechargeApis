@@ -65,7 +65,8 @@ public class RetailerController {
         loadMoney.setReqDate(date.getTimeStamp());
         System.out.println("Load: "+loadMoney);
         portalServices.loadMoneyRequest(loadMoney);
+        System.out.println("DONE");
         //portalServices.sendEmail("rawatchetan133@gmail.com", "Prefund Uploaded",loadMoney);
-        return "Thankyou, Details Uploaded Successfully!";
+        return "Request Submitted, please contact your client !";
     }
 }

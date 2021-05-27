@@ -116,8 +116,8 @@ public class ClientPortalServices  {
         String body = "ClientId: "+ clientId +"\n" + "Client: " + details.getName() +"\n" + 
                       "Mobile: "+  details.getMobileNo() +"\n" + "EmailId: " + details.getEmailId() +"\n" + "Current Balance: " + details.getBalance()+"\n\n\n" +
                       "Money Loaded by Client: "+"\n" +
-                      "Amount: "+loadMoney.getAmount()+"\n" + "Type: "+ loadMoney.getType() + "\n" + "Client Bank: "+ loadMoney.getClientBank()+ "\n" +
-                      "Client Account: " + loadMoney.getClientAccount() + "\n" + "Reference: " + loadMoney.getReference();      
+                      "Amount: "+loadMoney.getAmount()+"\n" + "Type: "+ loadMoney.getType() + "\n" + "Client Bank: "+ loadMoney.getFromBank()+ "\n" +
+                      "Client Account: " + loadMoney.getFromAccount() + "\n" + "Reference: " + loadMoney.getReference();      
 
         email.setTo(to);
         email.setSubject(subject);

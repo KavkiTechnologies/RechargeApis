@@ -34,15 +34,17 @@ public class LoadMoney {
     @Column(name= "Type")
     private String type;
     @Column(name= "Client_Bank")
-    private String clientBank;
+    private String fromBank;
     @Column(name= "Client_Account")
-    private String clientAccount;
+    private String fromAccount;
     @Column(name= "Reference")
     private String reference;
     @Column(name= "Bank")
-    private String bank;
+    private String toBank;
     @Column(name= "Bank_Number")
-    private String number;
+    private String toAccount;
     @Column(name= "Remarks")
     private String remarks;
+    @Column(name="Status")
+    private String status;
 }

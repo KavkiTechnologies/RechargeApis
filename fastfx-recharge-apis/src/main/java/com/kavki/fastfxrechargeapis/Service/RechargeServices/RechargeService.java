@@ -2,6 +2,7 @@ package com.kavki.fastfxrechargeapis.Service.RechargeServices;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kavki.fastfxrechargeapis.DAO.RetailerRepositories.RetailerLoginRepo;
+import com.kavki.fastfxrechargeapis.Entity.Admin.RkitWalletBalance;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.DthRecharge;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.DthResponse;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.MobileRecharge;
@@ -142,4 +143,30 @@ public class RechargeService {
         } 
     }
 
+    public String checkRkitBalance() {
+      //  https://rechargkit.biz/get/user/balance?partner_id=RKITAPI210305&api_password=xdvcsx6
+        try{
+            String new_url = baseUrl + "/user/balance";
+            UriComponentsBuilder uriBuilder  = UriComponentsBuilder.fromUriString(new_url)
+            // Add query parameter to url 
+            .queryParam("partner_id", env.getProperty("fastfx.partner_id"))
+            .queryParam("api_password",env.getProperty("fastfx.api_password"));
+
+            System.out.println("URL: "+uriBuilder.toUriString());
+            ResponseEntity<String> responseUser = restTemplate.exchange(uriBuilder.toUriString() ,
+                    HttpMethod.GET,
+                    null,
+                    String.class);
+            String jsonStr = responseUser.getBody();
+            System.out.println("json: "+jsonStr);
+            RkitWalletBalance responseObj = new ObjectMapper().readValue(jsonStr, RkitWalletBalance.class);
+            System.out.println("Res: "+responseObj+"\n");
+            return responseObj.getWALLET_BALANCE();
+    }
+    catch(Exception e)
+    {
+         System.out.println(e.getMessage());
+         return null;
+    }
+    }
 }

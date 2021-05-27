@@ -12,8 +12,11 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 import com.kavki.fastfxrechargeapis.DAO.AdminRepositories.*;
+import com.kavki.fastfxrechargeapis.DAO.ClientRepositories.PaymentSummeryRepo;
 import com.kavki.fastfxrechargeapis.DTO.Encryptor;
 import com.kavki.fastfxrechargeapis.Entity.Admin.*;
+import com.kavki.fastfxrechargeapis.Entity.Client.LoadMoney;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +33,8 @@ public class AdminPortalServices {
     private TransactionRepo tListRepo;
     @Autowired
     private AdminLoginRepo loginRepo;
+    @Autowired
+    private PaymentSummeryRepo summeryRepo;
 
     public List<MerchantEntity> getMRecords() {
         return mListRepo.findAll();
@@ -45,6 +50,10 @@ public class AdminPortalServices {
 
     public List<PrefundEntity> getPrefund(){
         return prefundRepo.findAll();
+    }
+
+    public List<LoadMoney> getRequests() {
+       return summeryRepo.findByRetailerIdIsNull();
     }
 
     public Double getBalance() {
@@ -87,5 +96,7 @@ public class AdminPortalServices {
             return loginStatus;
         }
     }
+
+   
     
 }

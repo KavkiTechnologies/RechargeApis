@@ -11,6 +11,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 import com.kavki.fastfxrechargeapis.Entity.Admin.*;
+import com.kavki.fastfxrechargeapis.Entity.Client.LoadMoney;
 import com.kavki.fastfxrechargeapis.Service.AdminServices.AdminPortalServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,11 @@ public class AdminController {
         return portalServices.getPrefund();
     }
 
+    @GetMapping("/prefundrequest")
+    public List<LoadMoney> getPrefundRequest(){
+        return portalServices.getRequests();
+    }
+
     @GetMapping("/totalbalance")
     public Double getTotalPrefund(){
         return portalServices.getBalance();
@@ -72,4 +78,6 @@ public class AdminController {
         throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException{
         return portalServices.verifyPassword(credentials);
     }
+
+
 }

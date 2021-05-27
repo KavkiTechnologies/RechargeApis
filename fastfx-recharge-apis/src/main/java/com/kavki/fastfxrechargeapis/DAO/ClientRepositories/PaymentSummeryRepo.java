@@ -17,6 +17,8 @@ public interface PaymentSummeryRepo extends JpaRepository<LoadMoney, Integer>{
     @Query("Select m from load_money m where m.retailerId =:rId")
     List<LoadMoney> findByRetailerId(@Param("rId") String retailerId);
 
+    LoadMoney findByClientIdAndReference(String clientId, String reference);
+
     List<LoadMoney> findByRetailerIdIsNull();
     
 }

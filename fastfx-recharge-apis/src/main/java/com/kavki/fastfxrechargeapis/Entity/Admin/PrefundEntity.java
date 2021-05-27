@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name="client_records")
 @Entity(name="request_prefund")
-
 public class PrefundEntity {
     
     @Id

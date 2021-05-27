@@ -48,16 +48,17 @@ public class AdminPortalServices {
         return cListRepo.findAll();
     }
 
-    public List<PrefundEntity> getPrefund(){
-        return prefundRepo.findAll();
-    }
+    // public List<PrefundEntity> getPrefund(){
+    //     return prefundRepo.findAll();
+    // }
 
     public List<LoadMoney> getRequests() {
        return summeryRepo.findByRetailerIdIsNull();
     }
 
     public Double getBalance() {
-        return prefundRepo.calcTotal();
+        //return prefundRepo.calcTotal();
+        return cListRepo.calcTotalClientPrefund();
     }
 
     public int getSuccess(){
@@ -95,6 +96,32 @@ public class AdminPortalServices {
             loginStatus.setLoginStatus("Error");
             return loginStatus;
         }
+    }
+
+    public void updatebalance(LoadMoney prefundDetails) {
+        LoadMoney updatePrefund = summeryRepo.findByClientIdAndReference(prefundDetails.getClientId(), prefundDetails.getReference());
+        String ClientId = prefundDetails.getClientId();
+        Float addbalance = Float.parseFloat(updatePrefund.getAmount());
+        String prefundStatus = prefundDetails.getStatus();
+        System.out.println("Pre DETAILS: "+prefundDetails+"\n");
+        System.out.println("DETAILS: "+updatePrefund+"\n");
+        System.out.println(ClientId+" "+addbalance+" "+prefundStatus);
+
+        if(updatePrefund.getStatus()==null && prefundStatus.equals("accept")){
+            ClientEntity client = cListRepo.findById(ClientId).orElse(null);
+            float currentBalance = client.getBalance();
+            float newBalance = currentBalance + addbalance;
+            client.setBalance(newBalance);
+            updatePrefund.setStatus("accepted");
+            summeryRepo.save(updatePrefund);
+            cListRepo.save(client);
+        }
+        else if(updatePrefund.getStatus()==null & prefundStatus.equals("decline")){
+            updatePrefund.setStatus("rejected");
+            summeryRepo.save(updatePrefund);
+        }
+      
+
     }
 
    

@@ -43,10 +43,10 @@ public class AdminController {
         return portalServices.getCRecords();
     }
 
-    @GetMapping("/prefund")
-    public List<PrefundEntity> getPrefundBalance(){
-        return portalServices.getPrefund();
-    }
+    // @GetMapping("/prefund")
+    // public List<PrefundEntity> getPrefundBalance(){
+    //     return portalServices.getPrefund();
+    // }
 
     @GetMapping("/prefundrequest")
     public List<LoadMoney> getPrefundRequest(){
@@ -79,5 +79,9 @@ public class AdminController {
         return portalServices.verifyPassword(credentials);
     }
 
+    @PostMapping("/updatebalance")
+    public void updateClientPrefund(@RequestBody LoadMoney prefundDetails){
+        portalServices.updatebalance(prefundDetails);
+    }
 
 }

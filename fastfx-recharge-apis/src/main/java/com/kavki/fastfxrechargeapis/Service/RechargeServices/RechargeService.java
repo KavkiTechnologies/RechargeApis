@@ -54,8 +54,9 @@ public class RechargeService {
             .queryParam("partner_request_id", transId)
             .queryParam("circle", rechargeObj.getCircle())
             .queryParam("recharge_type", rechargeObj.getRecharge_type())
-            .queryParam("user_var1",rechargeObj.getClientId())
-            .queryParam("user_var2",rechargeObj.getRetailerId());
+            .queryParam("user_var1",rechargeObj.getUser_var1())
+            .queryParam("user_var2",rechargeObj.getUser_var2())
+            .queryParam("user_var3",rechargeObj.getUser_var3());
 
             //Consuming Recharge API for GET 
             System.out.println("URL: "+uriBuilder.toUriString());
@@ -78,8 +79,17 @@ public class RechargeService {
     public MobileResponse postpaidRecharge(MobileRecharge rechargeObj) {
         try{
             String new_url = baseUrl + "postpaid/mobile";
-            // generating transacionId
-            String transId = new TransactionIdGenerator().generateTransId(rechargeObj.getClientId(),rechargeObj.getOperator_code(), rechargeObj.getCircle());
+            String clientId, transId;
+            // genertaing transaction Id 
+            if(rechargeObj.getRetailerId() != null){
+                clientId = rLoginRepo.findByRetailerId(rechargeObj.getRetailerId());
+                rechargeObj.setClientId(clientId);
+                transId = new TransactionIdGenerator().generateTransId(rechargeObj.getRetailerId(),rechargeObj.getOperator_code(), rechargeObj.getCircle());
+            }
+            else{
+                transId = new TransactionIdGenerator().generateTransId(rechargeObj.getClientId(),rechargeObj.getOperator_code(), rechargeObj.getCircle());
+            }
+          
             UriComponentsBuilder uriBuilder  = UriComponentsBuilder.fromUriString(new_url)
             // Add query parameter to url 
             .queryParam("partner_id", env.getProperty("fastfx.partner_id"))
@@ -90,7 +100,9 @@ public class RechargeService {
             .queryParam("partner_request_id", transId)
             .queryParam("circle", rechargeObj.getCircle())
             .queryParam("recharge_type", rechargeObj.getRecharge_type())
-            .queryParam("user_var1",rechargeObj.getClientId());
+            .queryParam("user_var1",rechargeObj.getUser_var1())
+            .queryParam("user_var2",rechargeObj.getUser_var2())
+            .queryParam("user_var3",rechargeObj.getUser_var3());
 
             //Consuming Recharge API for GET 
             ResponseEntity<String> responseUser = restTemplate.exchange(uriBuilder.toUriString() ,
@@ -121,8 +133,9 @@ public class RechargeService {
             .queryParam("amount", rechargeObj.getAmount())
             .queryParam("partner_request_id", rechargeObj.getPartner_request_id())
             .queryParam("customer_email", rechargeObj.getCustomer_email())
-            .queryParam("user_val1", rechargeObj.getUser_varl1());
-          //  .queryParam("user_val2", rechargeObj.getUser_varl2());
+            .queryParam("user_va1", rechargeObj.getUser_var1())
+            .queryParam("user_var2",rechargeObj.getUser_var2())
+            .queryParam("user_var3",rechargeObj.getUser_var3());
 
             //Consuming Recharge API for GET 
             System.out.println("URL: "+uriBuilder.toString());
@@ -162,11 +175,11 @@ public class RechargeService {
             RkitWalletBalance responseObj = new ObjectMapper().readValue(jsonStr, RkitWalletBalance.class);
             System.out.println("Res: "+responseObj+"\n");
             return responseObj.getWALLET_BALANCE();
-    }
-    catch(Exception e)
-    {
-         System.out.println(e.getMessage());
-         return null;
-    }
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 }

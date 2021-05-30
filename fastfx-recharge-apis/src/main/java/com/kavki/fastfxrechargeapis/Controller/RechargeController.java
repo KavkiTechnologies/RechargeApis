@@ -39,19 +39,19 @@ public class RechargeController {
         db.setTransDate(date.getTimeStamp());
         System.out.println("DB: "+db);
         tProcedure.callTransactionProcedure(db);
-        // dbService.saveTransaction(db);
+      //  dbService.saveTransaction(db);
         return responseParams;
     }
 
     @PostMapping("/postpaid")
-    public MobileResponse doPostpaidRecharge(@RequestBody MobileRecharge postpaidParams){
+    public MobileResponse doPostpaidRecharge(@RequestBody MobileRecharge requestParams){
       //  return apiService.postpaidRecharge(postpaidParams);
         MobileResponse responseParams = new MobileResponse();
-        responseParams = apiService.postpaidRecharge(postpaidParams);
+        responseParams = apiService.postpaidRecharge(requestParams);
         MobileParamsMapping mapper = new MobileParamsMapping();
-        MobileToDbEntity db =  mapper.mobileEntityMappingForDb(postpaidParams, responseParams);
-        db.setServiceType("prepaid");
+        MobileToDbEntity db =  mapper.mobileEntityMappingForDb(requestParams, responseParams);
         DateGenerator date = new DateGenerator();
+        db.setServiceType("prepaid");
         db.setTransDate(date.getTimeStamp());
         System.out.println("DB: "+db);
         tProcedure.callTransactionProcedure(db);

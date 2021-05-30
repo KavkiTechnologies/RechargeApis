@@ -16,7 +16,7 @@ public class TransactionProcedure {
     public void callTransactionProcedure(MobileToDbEntity db)
     {
         em.createNamedStoredProcedureQuery("transactionsP").setParameter("transactionId", db.getPartner_request_id())
-                                                    .setParameter("clientId",db.getUSERVAR1())
+                                                    .setParameter("clientId",db.getClientId())
                                                     .setParameter("mobileNo",db.getMobileNo())
                                                     .setParameter("operatorCode",db.getOperatorCode())
                                                     .setParameter("amount",db.getAmount())
@@ -30,12 +30,7 @@ public class TransactionProcedure {
                                                     .setParameter("message", db.getMessage())
                                                     .setParameter("transDate",db.getTransDate())
                                                     .setParameter("commission", db.getCommission())
-                                                    .setParameter("retailerId", db.getUSERVAR2())
-                                                    .setParameter("userVal3", db.getUSERVAR3()).execute();
+                                                    .setParameter("retailerId", db.getRetailerId()).execute();
     }
-
-
-
-    
-   
+  
 }

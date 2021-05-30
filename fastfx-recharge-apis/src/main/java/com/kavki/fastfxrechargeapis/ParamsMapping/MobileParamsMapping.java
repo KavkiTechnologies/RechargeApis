@@ -27,10 +27,8 @@ public class MobileParamsMapping {
         mobiledbEntity.setOptransId(responseParams.getOPTRANSID());
         mobiledbEntity.setMessage(responseParams.getMESSAGE());
         mobiledbEntity.setCommission(responseParams.getCOMMISSION());
-        mobiledbEntity.setUSERVAR1(responseParams.getUSERVAR1());
-        mobiledbEntity.setUSERVAR2(responseParams.getUSERVAR2());
-        mobiledbEntity.setUSERVAR3(responseParams.getUSERVAR3());
-
+        mobiledbEntity.setClientId(rechargeParams.getClientId());
+        mobiledbEntity.setRetailerId(rechargeParams.getRetailerId());
         return mobiledbEntity;
     }
 

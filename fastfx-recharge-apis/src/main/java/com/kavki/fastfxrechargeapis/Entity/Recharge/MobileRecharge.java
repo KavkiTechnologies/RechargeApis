@@ -17,5 +17,9 @@ public class MobileRecharge {
     private String recharge_type;
     private String clientId;
     private String retailerId;
+    private String user_var1;
+    private String user_var2;
+    private String user_var3;
+
    
 }

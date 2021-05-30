@@ -8,6 +8,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
+import java.util.Optional;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.kavki.fastfxrechargeapis.Entity.Admin.LoginStatus;
+import com.kavki.fastfxrechargeapis.Entity.Admin.RetailerEntity;
 import com.kavki.fastfxrechargeapis.Entity.Admin.TransactionEntity;
 import com.kavki.fastfxrechargeapis.Entity.Client.ClientCredentials;
 import com.kavki.fastfxrechargeapis.Entity.Client.LoadMoney;
@@ -76,5 +78,10 @@ public class ClientController {
     @GetMapping("/fastxbalance/{clientId}")
     public String getFastfxBalance(@PathVariable String clientId){
         return portalServices.getWalletBalance(clientId);
+    }
+
+    @GetMapping("/retailers/{clientId}")
+    public List<RetailerEntity> getRetailers(@PathVariable String clientId){
+        return portalServices.getRetailersList(clientId);
     }
 }

@@ -24,11 +24,11 @@ public class RetailerEntity {
     private long MobileNo;
     @Column(name="Email_Id")
     private String EmailId;
-    @Column(name = "Reatiler_Name")
+    @Column(name = "Retailer_Name")
     private String Name;
-    @Column(name = "Reatiler_Address")
+    @Column(name = "Retailer_Address")
     private String Address;
-    @Column(name = "Reatiler_Country")
+    @Column(name = "Retailer_Country")
     private String Country;
     @Column(name = "Account_Balance")
     private float Balance;

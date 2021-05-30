@@ -5,12 +5,14 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
+import java.util.Optional;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 import com.kavki.fastfxrechargeapis.DAO.AdminRepositories.ClientListRepo;
+import com.kavki.fastfxrechargeapis.DAO.AdminRepositories.RetailerListRepo;
 import com.kavki.fastfxrechargeapis.DAO.AdminRepositories.TransactionRepo;
 import com.kavki.fastfxrechargeapis.DAO.ClientRepositories.ClientLoginRepo;
 import com.kavki.fastfxrechargeapis.DAO.ClientRepositories.PaymentSummeryRepo;
@@ -43,6 +45,8 @@ public class ClientPortalServices  {
     private ClientListRepo cListRepo;
     @Autowired
     private PaymentSummeryRepo summeryRepo;
+    @Autowired
+    private RetailerListRepo rListRepo;
     
 
     public LoginStatus verifyPassword(ClientCredentials creds) 
@@ -133,5 +137,9 @@ public class ClientPortalServices  {
     public String getWalletBalance(String clientId) {
         String balance = cListRepo.getWalletBalance(clientId);
         return balance;
+    }
+
+    public List<RetailerEntity> getRetailersList(String clientId) {
+       return  rListRepo.findByClientId(clientId);
     }
 }

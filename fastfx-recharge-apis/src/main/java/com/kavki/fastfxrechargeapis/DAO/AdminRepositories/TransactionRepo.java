@@ -24,6 +24,9 @@ public interface TransactionRepo extends JpaRepository<TransactionEntity, String
 
     @Query("select t from transaction_details t where t.RetailerId =:rId")
     List<TransactionEntity> findByRetailerId(@Param("rId") String retailerId);
+
+    @Query(value="select sum(Amount) from transaction_details where Description='Success' and Client_ID =:clientId ",nativeQuery = true)
+    int calcSuccessForClient(String clientId);
     
 
     

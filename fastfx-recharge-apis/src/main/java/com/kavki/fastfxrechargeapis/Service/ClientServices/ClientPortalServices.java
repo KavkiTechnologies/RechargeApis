@@ -142,4 +142,8 @@ public class ClientPortalServices  {
     public List<RetailerEntity> getRetailersList(String clientId) {
        return  rListRepo.findByClientId(clientId);
     }
+
+    public int getSuccess(String clientId) {
+        return  tListRepo.calcSuccessForClient(clientId);
+    }
 }

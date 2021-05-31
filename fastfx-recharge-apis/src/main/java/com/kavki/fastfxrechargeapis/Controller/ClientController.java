@@ -60,6 +60,12 @@ public class ClientController {
         return portalServices.getclientTransactions(clientId);
     }
 
+    @GetMapping("/successtrans/{clientId}")
+    public int getSuccessTransactions(@PathVariable String clientId)
+    {
+        return portalServices.getSuccess(clientId);
+    }
+
     @PostMapping("/loadmoney")
     public String loadMoney(@RequestBody LoadMoney loadMoney){
         DateGenerator date = new DateGenerator();

@@ -98,7 +98,7 @@ public class AdminPortalServices {
         }
     }
 
-    public void updatebalance(LoadMoney prefundDetails) {
+    public void updateClientbalance(LoadMoney prefundDetails) {
         LoadMoney updatePrefund = summeryRepo.findByClientIdAndReference(prefundDetails.getClientId(), prefundDetails.getReference());
         String ClientId = prefundDetails.getClientId();
         Float addbalance = Float.parseFloat(updatePrefund.getAmount());

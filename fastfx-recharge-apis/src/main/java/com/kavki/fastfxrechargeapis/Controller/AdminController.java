@@ -81,7 +81,7 @@ public class AdminController {
 
     @PostMapping("/updatebalance")
     public void updateClientPrefund(@RequestBody LoadMoney prefundDetails){
-        portalServices.updatebalance(prefundDetails);
+        portalServices.updateClientbalance(prefundDetails);
     }
 
 }

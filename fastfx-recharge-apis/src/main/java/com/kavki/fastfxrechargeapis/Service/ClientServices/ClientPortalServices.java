@@ -146,4 +146,32 @@ public class ClientPortalServices  {
     public int getSuccess(String clientId) {
         return  tListRepo.calcSuccessForClient(clientId);
     }
+
+    public void updateRetailerbalance(LoadMoney prefundDetails) {
+
+            LoadMoney updatePrefund = summeryRepo.findByRetailerIdAndReference(prefundDetails.getRetailerId(), prefundDetails.getReference());
+            String RetailerId = prefundDetails.getRetailerId();
+            Float addbalance = Float.parseFloat(updatePrefund.getAmount());
+            String prefundStatus = prefundDetails.getStatus();
+            System.out.println("Pre DETAILS: "+prefundDetails+"\n");
+            System.out.println("DETAILS: "+updatePrefund+"\n");
+            System.out.println(RetailerId+" "+addbalance+" "+prefundStatus);
+    
+            if(updatePrefund.getStatus()==null && prefundStatus.equals("accept")){
+                RetailerEntity retailer = rListRepo.findById(RetailerId).orElse(null);
+                System.out.println(retailer);
+                float currentBalance = retailer.getBalance();
+                float newBalance = currentBalance + addbalance;
+                System.out.println("BAL: "+currentBalance+" "+newBalance);
+                retailer.setBalance(newBalance);
+                updatePrefund.setStatus("accepted");
+                summeryRepo.save(updatePrefund);
+                rListRepo.save(retailer);
+            }
+            else if(updatePrefund.getStatus()==null & prefundStatus.equals("decline")){
+                updatePrefund.setStatus("rejected");
+                summeryRepo.save(updatePrefund);
+            }
+        
+    }
 }

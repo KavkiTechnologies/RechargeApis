@@ -73,7 +73,8 @@ public class ClientController {
         System.out.println("Load: "+loadMoney);
         portalServices.loadMoneyRequest(loadMoney);
         portalServices.sendEmail("rawatchetan133@gmail.com", "Prefund Uploaded",loadMoney);
-        return "Request Submitted, please contact the admin !";
+       // return "Request Submitted, please contact the admin !";
+       return "true";
     }
 
     @GetMapping("/paymentsummery/{clientId}")
@@ -89,5 +90,10 @@ public class ClientController {
     @GetMapping("/retailers/{clientId}")
     public List<RetailerEntity> getRetailers(@PathVariable String clientId){
         return portalServices.getRetailersList(clientId);
+    }
+
+    @PostMapping("/updatebalance")
+    public void updateRetailerPrefund(@RequestBody LoadMoney prefundDetails){
+        portalServices.updateRetailerbalance(prefundDetails);
     }
 }

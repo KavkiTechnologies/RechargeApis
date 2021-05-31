@@ -67,7 +67,8 @@ public class RetailerController {
         portalServices.loadMoneyRequest(loadMoney);
         System.out.println("DONE");
         //portalServices.sendEmail("rawatchetan133@gmail.com", "Prefund Uploaded",loadMoney);
-        return "Request Submitted, please contact your client !";
+      //  return "Request Submitted, please contact your client !";
+      return "true";
     }
 
     @GetMapping("/fastxbalance/{retailerId}")

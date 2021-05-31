@@ -30,35 +30,46 @@ public class RechargeController {
     public MobileResponse doPrepaidRecharge(@RequestBody MobileRecharge requestParams){ 
              
         MobileResponse responseParams = new MobileResponse();
-        responseParams = apiService.prepaidRecharge(requestParams);
-        System.out.println("Response: "+responseParams);
-        MobileParamsMapping mapper = new MobileParamsMapping();
-        MobileToDbEntity db =  mapper.mobileEntityMappingForDb(requestParams, responseParams);
-        DateGenerator date = new DateGenerator();
-        db.setServiceType("prepaid");
-        db.setTransDate(date.getTimeStamp());
-        System.out.println("DB: "+db);
-        tProcedure.callTransactionProcedure(db);
-      //  dbService.saveTransaction(db);
-        return responseParams;
+        String message = apiService.checkUserBalance(requestParams);
+        if(message.equals("balance updated")){
+          responseParams = apiService.prepaidRecharge(requestParams);
+          System.out.println("Response: "+responseParams);
+          MobileParamsMapping mapper = new MobileParamsMapping();
+          MobileToDbEntity db =  mapper.mobileEntityMappingForDb(requestParams, responseParams);
+          DateGenerator date = new DateGenerator();
+          db.setServiceType("prepaid");
+          db.setTransDate(date.getTimeStamp());
+          System.out.println("DB: "+db);
+          tProcedure.callTransactionProcedure(db);
+         //  dbService.saveTransaction(db);
+          return responseParams;
+        }
+        else{
+          responseParams.setMESSAGE(message);
+          return responseParams;
+        }
     }
 
     @PostMapping("/postpaid")
     public MobileResponse doPostpaidRecharge(@RequestBody MobileRecharge requestParams){
-      //  return apiService.postpaidRecharge(postpaidParams);
-        MobileResponse responseParams = new MobileResponse();
-        responseParams = apiService.postpaidRecharge(requestParams);
-        MobileParamsMapping mapper = new MobileParamsMapping();
-        MobileToDbEntity db =  mapper.mobileEntityMappingForDb(requestParams, responseParams);
-        DateGenerator date = new DateGenerator();
-        db.setServiceType("prepaid");
-        db.setTransDate(date.getTimeStamp());
-        System.out.println("DB: "+db);
-        tProcedure.callTransactionProcedure(db);
-        System.out.println("done trans");
-        // dbService.saveTransaction(db);
-     //   return responseParams.getMESSAGE();
-     return responseParams;
+      MobileResponse responseParams = new MobileResponse();
+      String message = apiService.checkUserBalance(requestParams);
+      if(message.equals("balance updated")){
+          responseParams = apiService.postpaidRecharge(requestParams);
+          MobileParamsMapping mapper = new MobileParamsMapping();
+          MobileToDbEntity db =  mapper.mobileEntityMappingForDb(requestParams, responseParams);
+          DateGenerator date = new DateGenerator();
+          db.setServiceType("prepaid");
+          db.setTransDate(date.getTimeStamp());
+          System.out.println("DB: "+db);
+          tProcedure.callTransactionProcedure(db);
+          System.out.println("done trans");
+          return responseParams;
+      }
+      else{
+        responseParams.setMESSAGE(message);
+        return responseParams;
+      }
     }
 
     @PostMapping("/dth")

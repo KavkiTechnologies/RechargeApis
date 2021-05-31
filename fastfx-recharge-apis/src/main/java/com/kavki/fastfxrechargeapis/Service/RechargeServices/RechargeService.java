@@ -1,7 +1,10 @@
 package com.kavki.fastfxrechargeapis.Service.RechargeServices;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kavki.fastfxrechargeapis.DAO.AdminRepositories.ClientListRepo;
+import com.kavki.fastfxrechargeapis.DAO.AdminRepositories.RetailerListRepo;
 import com.kavki.fastfxrechargeapis.DAO.RetailerRepositories.RetailerLoginRepo;
+import com.kavki.fastfxrechargeapis.Entity.Admin.RetailerEntity;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.DthRecharge;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.DthResponse;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.MobileRecharge;
@@ -26,22 +29,35 @@ public class RechargeService {
 	private Environment env;
     @Autowired
     private RetailerLoginRepo rLoginRepo;
+    @Autowired
+    private RetailerListRepo rListRepo;
+    @Autowired 
+    private ClientListRepo cListRepo;
 
-    private static String baseUrl = "https://rechargkit.biz/get/";
+    private static String baseUrl = "https://sandbox.rechargkit.biz/get/";
 
     public MobileResponse prepaidRecharge(MobileRecharge rechargeObj){
 
         try{
             String new_url = baseUrl + "prepaid/mobile";
-            String clientId, transId;
+            String clientId, transId, retailerId;
+
+            retailerId = rechargeObj.getRetailerId();
+            clientId = rechargeObj.getClientId();
             // genertaing transaction Id 
-            if(rechargeObj.getRetailerId() != null){
-                clientId = rLoginRepo.findByRetailerId(rechargeObj.getRetailerId());
+            if(retailerId != null){
+                clientId = rLoginRepo.findByRetailerId(retailerId);
                 rechargeObj.setClientId(clientId);
                 transId = new TransactionIdGenerator().generateTransId(rechargeObj.getRetailerId(),rechargeObj.getOperator_code(), rechargeObj.getCircle());
             }
-            else{
+            else if(clientId !=null && retailerId == null){
+                rechargeObj.setRetailerId("self");
                 transId = new TransactionIdGenerator().generateTransId(rechargeObj.getClientId(),rechargeObj.getOperator_code(), rechargeObj.getCircle());
+            }
+            else{
+                MobileResponse responseObj = new MobileResponse();
+                responseObj.setMESSAGE("Call Service in proper way");
+                return responseObj;
             }
 
             UriComponentsBuilder uriBuilder  = UriComponentsBuilder.fromUriString(new_url)
@@ -79,17 +95,26 @@ public class RechargeService {
     public MobileResponse postpaidRecharge(MobileRecharge rechargeObj) {
         try{
             String new_url = baseUrl + "postpaid/mobile";
-            String clientId, transId;
+            String clientId, transId, retailerId;
+
+            retailerId = rechargeObj.getRetailerId();
+            clientId = rechargeObj.getClientId();
             // genertaing transaction Id 
-            if(rechargeObj.getRetailerId() != null){
-                clientId = rLoginRepo.findByRetailerId(rechargeObj.getRetailerId());
+            if(retailerId != null){
+                clientId = rLoginRepo.findByRetailerId(retailerId);
                 rechargeObj.setClientId(clientId);
                 transId = new TransactionIdGenerator().generateTransId(rechargeObj.getRetailerId(),rechargeObj.getOperator_code(), rechargeObj.getCircle());
             }
-            else{
+            else if(clientId !=null && retailerId == null){
+                rechargeObj.setRetailerId("self");
                 transId = new TransactionIdGenerator().generateTransId(rechargeObj.getClientId(),rechargeObj.getOperator_code(), rechargeObj.getCircle());
             }
-          
+            else{
+                MobileResponse responseObj = new MobileResponse();
+                responseObj.setMESSAGE("Call Service in proper way");
+                return responseObj;
+            }
+                      
             UriComponentsBuilder uriBuilder  = UriComponentsBuilder.fromUriString(new_url)
             // Add query parameter to url 
             .queryParam("partner_id", env.getProperty("fastfx.partner_id"))
@@ -181,5 +206,49 @@ public class RechargeService {
             System.out.println(e.getMessage());
             return null;
         }
+    }
+
+    public String checkUserBalance(MobileRecharge requestParams) {
+        String clientId, retailerId;
+        Float rechargeAmount, currentBalance, updatedBalance;
+
+        retailerId = requestParams.getRetailerId();
+        clientId = requestParams.getClientId();
+        System.out.println("ids: "+retailerId+" "+clientId);
+        rechargeAmount = (float) requestParams.getAmount();
+        if(retailerId!=null)
+        {
+                 currentBalance = Float.parseFloat(rListRepo.getWalletBalance(retailerId)); 
+                 System.out.println("cur: "+currentBalance);
+                 if(rechargeAmount<= currentBalance){
+                     updatedBalance = currentBalance - rechargeAmount;
+                     System.out.println("up: "+updatedBalance);
+                     rListRepo.updateBalance(retailerId,updatedBalance);
+                     return "balance updated";
+                 }
+                 else{
+                     return "Insufficient Balance";
+                 }
+        
+        }
+        else if(retailerId==null && clientId!=null)
+        {
+            currentBalance = Float.parseFloat(cListRepo.getWalletBalance(clientId));
+            System.out.println("cur: "+currentBalance);
+            if(rechargeAmount<= currentBalance){
+                updatedBalance = currentBalance - rechargeAmount;
+                System.out.println("up: "+updatedBalance);
+                cListRepo.updateBalance(clientId,updatedBalance);
+                return "balance updated";
+            }
+            else{
+                return "Insufficient Balance";
+            }
+        }
+        else {
+            return "Call service in proper way";
+        }
+        
+        
     }
 }

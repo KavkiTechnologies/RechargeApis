@@ -13,11 +13,11 @@ public class TransactionProcedure {
     @Autowired
     private EntityManager em;
     
-    public void callTransactionProcedure(MobileToDbEntity db)
+    public void callTransactionProcedure(MapToDbEntity db)
     {
         em.createNamedStoredProcedureQuery("transactionsP").setParameter("transactionId", db.getPartner_request_id())
                                                     .setParameter("clientId",db.getClientId())
-                                                    .setParameter("mobileNo",db.getMobileNo())
+                                                    .setParameter("recharge_number",db.getNumber()) // mobile or vc Number
                                                     .setParameter("operatorCode",db.getOperatorCode())
                                                     .setParameter("amount",db.getAmount())
                                                     .setParameter("circle", db.getCircle())
@@ -30,7 +30,8 @@ public class TransactionProcedure {
                                                     .setParameter("message", db.getMessage())
                                                     .setParameter("transDate",db.getTransDate())
                                                     .setParameter("commission", db.getCommission())
-                                                    .setParameter("retailerId", db.getRetailerId()).execute();
+                                                    .setParameter("retailerId", db.getRetailerId())
+                                                    .setParameter("charge", db.getCharge()).execute();
     }
   
 }

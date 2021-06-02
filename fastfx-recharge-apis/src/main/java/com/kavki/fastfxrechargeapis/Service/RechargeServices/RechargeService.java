@@ -8,7 +8,7 @@ import com.kavki.fastfxrechargeapis.Entity.Admin.RetailerEntity;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.DthRecharge;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.DthResponse;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.MobileRecharge;
-import com.kavki.fastfxrechargeapis.Entity.Recharge.MobileResponse;
+import com.kavki.fastfxrechargeapis.Entity.Recharge.RkitMobileResponse;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.RkitWalletBalance;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.TransactionIdGenerator;
 
@@ -36,7 +36,7 @@ public class RechargeService {
 
     private static String baseUrl = "https://sandbox.rechargkit.biz/get/";
 
-    public MobileResponse prepaidRecharge(MobileRecharge rechargeObj){
+    public RkitMobileResponse prepaidRecharge(MobileRecharge rechargeObj){
 
         try{
             String new_url = baseUrl + "prepaid/mobile";
@@ -55,7 +55,7 @@ public class RechargeService {
                 transId = new TransactionIdGenerator().generateTransId(rechargeObj.getClientId(),rechargeObj.getOperator_code(), rechargeObj.getCircle());
             }
             else{
-                MobileResponse responseObj = new MobileResponse();
+                RkitMobileResponse responseObj = new RkitMobileResponse();
                 responseObj.setMESSAGE("Call Service in proper way");
                 return responseObj;
             }
@@ -83,7 +83,7 @@ public class RechargeService {
             String jsonStr = responseUser.getBody();
             
             //converting json response from API to Response Obj
-            MobileResponse responseObj = new ObjectMapper().readValue(jsonStr, MobileResponse.class);
+            RkitMobileResponse responseObj = new ObjectMapper().readValue(jsonStr, RkitMobileResponse.class);
             return responseObj;
         }
         catch(Exception e)
@@ -92,7 +92,7 @@ public class RechargeService {
         } 
     }
 
-    public MobileResponse postpaidRecharge(MobileRecharge rechargeObj) {
+    public RkitMobileResponse postpaidRecharge(MobileRecharge rechargeObj) {
         try{
             String new_url = baseUrl + "postpaid/mobile";
             String clientId, transId, retailerId;
@@ -110,7 +110,7 @@ public class RechargeService {
                 transId = new TransactionIdGenerator().generateTransId(rechargeObj.getClientId(),rechargeObj.getOperator_code(), rechargeObj.getCircle());
             }
             else{
-                MobileResponse responseObj = new MobileResponse();
+                RkitMobileResponse responseObj = new RkitMobileResponse();
                 responseObj.setMESSAGE("Call Service in proper way");
                 return responseObj;
             }
@@ -137,7 +137,7 @@ public class RechargeService {
             String jsonStr = responseUser.getBody();
             
             //converting json response from API to Response Obj
-            MobileResponse responseObj = new ObjectMapper().readValue(jsonStr, MobileResponse.class);
+            RkitMobileResponse responseObj = new ObjectMapper().readValue(jsonStr, RkitMobileResponse.class);
             return responseObj;
         }
         catch(Exception e)
@@ -149,6 +149,27 @@ public class RechargeService {
     public DthResponse dthRecharge(DthRecharge rechargeObj) {
         try{
             String new_url = baseUrl + "/dth";
+            String clientId, transId, retailerId;
+
+            retailerId = rechargeObj.getRetailerId();
+            clientId = rechargeObj.getClientId();
+            // genertaing transaction Id 
+            if(retailerId != null){
+                clientId = rLoginRepo.findByRetailerId(retailerId);
+                rechargeObj.setClientId(clientId);
+               // needs to be modified
+                transId = new TransactionIdGenerator().generateTransId(rechargeObj.getRetailerId(),rechargeObj.getOperator_code(), rechargeObj.getOperator_code());
+            }
+            else if(clientId !=null && retailerId == null){
+                rechargeObj.setRetailerId("self");
+                // needs to be modified
+                transId = new TransactionIdGenerator().generateTransId(rechargeObj.getClientId(),rechargeObj.getOperator_code(), rechargeObj.getOperator_code());
+            }
+            else{
+                DthResponse responseObj = new DthResponse();
+                responseObj.setMESSAGE("Call Service in proper way");
+                return responseObj;
+            }
             UriComponentsBuilder uriBuilder  = UriComponentsBuilder.fromUriString(new_url)
             // Add query parameter to url 
             .queryParam("partner_id", env.getProperty("fastfx.partner_id"))
@@ -157,7 +178,7 @@ public class RechargeService {
             .queryParam("operator_code", rechargeObj.getOperator_code())
             .queryParam("amount", rechargeObj.getAmount())
             .queryParam("partner_request_id", rechargeObj.getPartner_request_id())
-            .queryParam("customer_email", rechargeObj.getCustomer_email())
+            //.queryParam("customer_email", rechargeObj.getCustomer_email())
             .queryParam("user_va1", rechargeObj.getUser_var1())
             .queryParam("user_var2",rechargeObj.getUser_var2())
             .queryParam("user_var3",rechargeObj.getUser_var3());
@@ -182,7 +203,6 @@ public class RechargeService {
     }
 
     public String checkRkitBalance() {
-      //  https://rechargkit.biz/get/user/balance?partner_id=RKITAPI210305&api_password=xdvcsx6
         try{
             String new_url = baseUrl + "/user/balance";
             UriComponentsBuilder uriBuilder  = UriComponentsBuilder.fromUriString(new_url)
@@ -196,9 +216,7 @@ public class RechargeService {
                     null,
                     String.class);
             String jsonStr = responseUser.getBody();
-            System.out.println("json: "+jsonStr);
-            RkitWalletBalance responseObj = new ObjectMapper().readValue(jsonStr, RkitWalletBalance.class);
-            System.out.println("Res: "+responseObj+"\n");
+            RkitWalletBalance responseObj = new ObjectMapper().readValue(jsonStr, RkitWalletBalance.class); // converting Json to java Object
             return responseObj.getWALLET_BALANCE();
         }
         catch(Exception e)
@@ -214,8 +232,8 @@ public class RechargeService {
 
         retailerId = requestParams.getRetailerId();
         clientId = requestParams.getClientId();
-        System.out.println("ids: "+retailerId+" "+clientId);
         rechargeAmount = (float) requestParams.getAmount();
+
         if(retailerId!=null)
         {
                  currentBalance = Float.parseFloat(rListRepo.getWalletBalance(retailerId)); 
@@ -248,7 +266,5 @@ public class RechargeService {
         else {
             return "Call service in proper way";
         }
-        
-        
     }
 }

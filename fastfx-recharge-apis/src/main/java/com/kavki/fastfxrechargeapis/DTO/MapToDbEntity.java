@@ -2,6 +2,11 @@ package com.kavki.fastfxrechargeapis.DTO;
 
 import javax.persistence.*;
 
+import com.kavki.fastfxrechargeapis.Entity.Recharge.MobileRecharge;
+import com.kavki.fastfxrechargeapis.Entity.Recharge.RkitMobileResponse;
+
+import org.springframework.stereotype.Component;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +21,7 @@ import lombok.NoArgsConstructor;
     procedureName = "transactionsP",
     parameters = {@StoredProcedureParameter(mode=ParameterMode.IN, name = "transactionId",type = String.class),
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="clientId",type= String.class),
-                  @StoredProcedureParameter(mode=ParameterMode.IN,name="mobileNo",type= Long.class),
+                  @StoredProcedureParameter(mode=ParameterMode.IN,name="recharge_number",type= Long.class),
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="operatorCode",type= Integer.class),
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="amount",type= Integer.class),
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="circle",type= Integer.class),
@@ -29,16 +34,18 @@ import lombok.NoArgsConstructor;
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="message",type= String.class),
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="transDate",type= String.class),
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="commission",type= String.class),
-                  @StoredProcedureParameter(mode=ParameterMode.IN,name="retailerId",type= String.class)})
+                  @StoredProcedureParameter(mode=ParameterMode.IN,name="retailerId",type= String.class),
+                  @StoredProcedureParameter(mode=ParameterMode.IN,name="charge",type= String.class)
+                })
                  
-
-public class MobileToDbEntity {
+@Component
+public class MapToDbEntity {
     
     @Id
     @Column(name = "Transaction_Id")
     private String Partner_request_id;
-    @Column(name="mobile_no")
-    private long MobileNo;
+    @Column(name="recharge_number")
+    private long Number;
     @Column(name="orderid")
     private int orderId;
     @Column(name="operator_code")
@@ -67,5 +74,27 @@ public class MobileToDbEntity {
     private String clientId;
     @Column(name ="retailer_Id")
     private String retailerId;
+    @Column(name = "charge")
+    private String charge;
   
+    // Mapping rechargeParameters & Rkit Response Parameters into one to be passed to the Transaction Stored Procedure
+    public MapToDbEntity mapMobileToDbEntity(MobileRecharge requestParams, RkitMobileResponse responseParams){
+            MapToDbEntity dbEntity = new MapToDbEntity();
+            dbEntity.setPartner_request_id(responseParams.getPARTNERREQID());
+            dbEntity.setNumber(requestParams.getMobile_no());
+            dbEntity.setOperatorCode(requestParams.getOperator_code());
+            dbEntity.setAmount(requestParams.getAmount());
+            dbEntity.setCircle(requestParams.getCircle());
+            dbEntity.setRechargeType(requestParams.getRecharge_type());
+            dbEntity.setERROR(responseParams.getERROR());
+            dbEntity.setStatus(responseParams.getSTATUS());
+            dbEntity.setOrderId(responseParams.getORDERID());
+            dbEntity.setOptransId(responseParams.getOPTRANSID());
+            dbEntity.setMessage(responseParams.getMESSAGE());
+            dbEntity.setCommission(responseParams.getCOMMISSION());
+            dbEntity.setClientId(requestParams.getClientId());
+            dbEntity.setRetailerId(requestParams.getRetailerId());
+            dbEntity.setCharge(responseParams.getCHARGE());
+            return dbEntity;
+    }
 }

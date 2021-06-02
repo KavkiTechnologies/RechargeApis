@@ -4,6 +4,9 @@ package com.kavki.fastfxrechargeapis.Entity.Recharge;
 import java.security.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+import org.springframework.stereotype.Component;
+@Component
 public class DateGenerator {
     
     public String getTimeStamp(){

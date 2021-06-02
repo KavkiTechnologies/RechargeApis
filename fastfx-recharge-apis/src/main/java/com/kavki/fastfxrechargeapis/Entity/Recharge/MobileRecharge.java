@@ -20,6 +20,4 @@ public class MobileRecharge {
     private String user_var1;
     private String user_var2;
     private String user_var3;
-
-   
 }

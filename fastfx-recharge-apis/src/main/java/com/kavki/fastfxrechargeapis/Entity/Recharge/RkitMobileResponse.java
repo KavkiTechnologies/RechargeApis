@@ -5,29 +5,35 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import org.springframework.stereotype.Component;
+
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class DthResponse {
+@AllArgsConstructor
+@Component
+public class RkitMobileResponse {
     
     @JsonProperty("ERROR") 
-    public int eRROR;
+    private int eRROR;
     @JsonProperty("STATUS") 
-    public int sTATUS;
+    private int sTATUS;
     @JsonProperty("ORDERID") 
-    public String oRDERID;
+    private int oRDERID;
     @JsonProperty("OPTRANSID") 
-    public String oPTRANSID;
+    private long oPTRANSID;
     @JsonProperty("PARTNERREQID") 
-    public String pARTNERREQID;
+    private String pARTNERREQID;
     @JsonProperty("MESSAGE") 
-    public String mESSAGE;
+    private String mESSAGE;
     @JsonProperty("USERVAR1") 
-    public String uSERVAR1;
+    private String uSERVAR1;
     @JsonProperty("USERVAR2") 
-    public String uSERVAR2;
+    private String uSERVAR2;
     @JsonProperty("USERVAR3") 
-    public String uSERVAR3;
+    private String uSERVAR3;
     @JsonProperty("COMMISSION") 
-    public String cOMMISSION;
+    private String cOMMISSION;
+    @JsonProperty("CHARGE") 
+    private String cHARGE;
+
 }

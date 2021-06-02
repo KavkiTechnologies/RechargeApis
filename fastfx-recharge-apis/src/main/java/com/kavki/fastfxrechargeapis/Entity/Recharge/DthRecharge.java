@@ -17,6 +17,8 @@ public class DthRecharge {
     private int amount;
     private String partner_request_id;
     private String customer_email;
+    private String clientId;
+    private String retailerId;
     private String user_var1;
     private String user_var2;
     private String user_var3;

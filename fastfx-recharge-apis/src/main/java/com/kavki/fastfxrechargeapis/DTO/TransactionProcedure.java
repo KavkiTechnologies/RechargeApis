@@ -15,13 +15,14 @@ public class TransactionProcedure {
     
     public void callTransactionProcedure(MapToDbEntity db)
     {
-        em.createNamedStoredProcedureQuery("transactionsP").setParameter("transactionId", db.getPartner_request_id())
+        em.createNamedStoredProcedureQuery("transactionP").setParameter("transactionId", db.getPartner_request_id())
                                                     .setParameter("clientId",db.getClientId())
-                                                    .setParameter("recharge_number",db.getNumber()) // mobile or vc Number
+                                                    .setParameter("rechargeNumber",db.getNumber()) // mobile or vc Number
                                                     .setParameter("operatorCode",db.getOperatorCode())
                                                     .setParameter("amount",db.getAmount())
                                                     .setParameter("circle", db.getCircle())
                                                     .setParameter("rechargeType", db.getRechargeType())
+                                                    .setParameter("serviceProvider", db.getServiceProvider())
                                                     .setParameter("serviceType", db.getServiceType())
                                                     .setParameter("errorCode", db.getERROR())
                                                     .setParameter("statusCode", db.getStatus())

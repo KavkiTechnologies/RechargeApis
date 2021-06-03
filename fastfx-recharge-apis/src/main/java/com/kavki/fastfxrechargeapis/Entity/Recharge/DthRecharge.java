@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class DthRecharge {
     
    
-    private long customer_id;
+    private String customer_id;
     private int operator_code;
     private int amount;
     private String partner_request_id;

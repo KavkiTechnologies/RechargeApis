@@ -17,8 +17,6 @@ public class TransactionEntity {
     private int Sno;
     @Column(name= "Transaction_Id", nullable = false)
     private String TransactionId;
-    // @Column(name= "Client_Name", nullable = false)
-    // private String Client;
     @Column(name= "Client_ID", nullable = false)
     private String ClientId;
     @Column(name="Retailer_Id")
@@ -27,6 +25,8 @@ public class TransactionEntity {
     private String OperatorName;
     @Column(name="Service_Type", nullable=false)
     private String ServiceType;
+    @Column(name="Service_Provider", nullable=false)
+    private String ServiceProvider;
     @Column(name= "Tranx_date", nullable = false)
     private String TranxDate;
     @Column(name= "Updated_Tranx_date", nullable = false)

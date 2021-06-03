@@ -18,9 +18,9 @@ public class RechargeController {
     @Autowired 
     private TransactionProcedure transProcedure;
     @Autowired
-    private RkitMobileResponse rkitResponseParams;
+    private RkitApiResponse rkitResponse;
     @Autowired
-    private MobileResponse response;
+    private RechargeRsponse response;
     @Autowired
     private MapToDbEntity dbEntityMapper;
     @Autowired
@@ -31,22 +31,33 @@ public class RechargeController {
     {
         return apiService.checkRkitBalance();
     }
+
+    @PostMapping("/orderstatus")
+    public RechargeRsponse checkOrderStatus(@RequestBody RechargeRsponse params){
+      System.out.print("Order: "+params+"\n");
+     // return null;  
+     rkitResponse= apiService.getOrderStatus(params);
+     return response.mapRkitResponseToCustomResponse(rkitResponse);
+    }
     
     @PostMapping("/prepaid")
-    public MobileResponse doPrepaidRecharge(@RequestBody MobileRecharge requestParams){ 
+    public RechargeRsponse doPrepaidRecharge(@RequestBody MobileRecharge requestParams){ 
              
-        String message = apiService.checkUserBalance(requestParams);
+      String message = apiService.checkUserBalance(requestParams.getClientId(), requestParams.getRetailerId(), requestParams.getAmount());
         if(message.equals("balance updated")){
           // calling rkit prepaid recharge api
-          rkitResponseParams = apiService.prepaidRecharge(requestParams);         
+          rkitResponse = apiService.prepaidRecharge(requestParams); 
+          System.out.println("Rkit: "+rkitResponse);        
           // mapping both mobileRequest & mobileResponse to Database Entity to be passed to transaction procedure
-          MapToDbEntity databaseEntity = dbEntityMapper.mapMobileToDbEntity(requestParams, rkitResponseParams);
+          MapToDbEntity databaseEntity = dbEntityMapper.mapMobileToDbEntity(requestParams, rkitResponse);
          
           databaseEntity.setServiceType("Prepaid"); // adding service type 
           databaseEntity.setTransDate(date.getTimeStamp()); //adding current transaction date
           databaseEntity.setCharge("none"); // prepaid apis don't have charge amount
+          databaseEntity.setServiceProvider("Rkit"); //adding Service Provider for this api
+          System.out.println("DB: "+databaseEntity+"\n");
           transProcedure.callTransactionProcedure(databaseEntity); // calling transaction procedure
-          return response.mapRkitResponseToCustomResponse(rkitResponseParams);
+          return response.mapRkitResponseToCustomResponse(rkitResponse);
         }
         else{
           response.setMessage(message);
@@ -55,18 +66,19 @@ public class RechargeController {
     }
 
     @PostMapping("/postpaid")
-    public MobileResponse doPostpaidRecharge(@RequestBody MobileRecharge requestParams){
+    public RechargeRsponse doPostpaidRecharge(@RequestBody MobileRecharge requestParams){
   
-      String message = apiService.checkUserBalance(requestParams);
+      String message = apiService.checkUserBalance(requestParams.getClientId(), requestParams.getRetailerId(), requestParams.getAmount());
       if(message.equals("balance updated")){
-        rkitResponseParams = apiService.postpaidRecharge(requestParams);
+        rkitResponse = apiService.postpaidRecharge(requestParams);
         // mapping both mobileRequest & mobileResponse to Database Entity to be passed to transaction procedure
-        MapToDbEntity databaseEntity = dbEntityMapper.mapMobileToDbEntity(requestParams, rkitResponseParams);
+        MapToDbEntity databaseEntity = dbEntityMapper.mapMobileToDbEntity(requestParams, rkitResponse);
         
         databaseEntity.setServiceType("Postpaid"); // adding service type 
         databaseEntity.setTransDate(date.getTimeStamp()); //adding current transaction date
+        databaseEntity.setServiceProvider("Rkit"); //adding Service Provider for this api
         transProcedure.callTransactionProcedure(databaseEntity); // calling transaction procedure
-        return response.mapRkitResponseToCustomResponse(rkitResponseParams);
+        return response.mapRkitResponseToCustomResponse(rkitResponse);
       }
       else{
         response.setMessage(message);
@@ -75,7 +87,24 @@ public class RechargeController {
     }
 
     @PostMapping("/dth")
-    public DthResponse doDTHRecharge(@RequestBody DthRecharge dthParams){
-        return apiService.dthRecharge(dthParams);
+    public RechargeRsponse doDTHRecharge(@RequestBody DthRecharge requestParams){
+      String message = apiService.checkUserBalance(requestParams.getClientId(), requestParams.getRetailerId(), requestParams.getAmount());
+        if(message.equals("balance updated")){
+          // calling rkit prepaid recharge api
+        //System.out.println("DTH: "+requestParams);
+          rkitResponse = apiService.dthRecharge(requestParams);
+          System.out.println("RkitResponse: "+rkitResponse+"\n");
+          MapToDbEntity databaseEntity = dbEntityMapper.mapDthToDbEntity(requestParams, rkitResponse);
+          databaseEntity.setServiceType("Dth"); // adding service type 
+          databaseEntity.setTransDate(date.getTimeStamp()); //adding current transaction date
+          databaseEntity.setServiceProvider("Rkit");  //adding Service Provider for this api
+          System.out.println("db: "+databaseEntity+"\n");
+          transProcedure.callTransactionProcedure(databaseEntity); // calling transaction procedure
+          return response.mapRkitResponseToCustomResponse(rkitResponse);      
+          }
+        else{
+          response.setMessage(message);
+          return response;
+        }
     }
 }

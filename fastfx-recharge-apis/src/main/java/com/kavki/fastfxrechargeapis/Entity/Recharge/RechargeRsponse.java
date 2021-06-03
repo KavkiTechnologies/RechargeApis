@@ -8,10 +8,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.stereotype.Component;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Component
-public class MobileResponse {
+public class RechargeRsponse {
      
     private int error; 
     private int status;
@@ -23,8 +23,8 @@ public class MobileResponse {
     private String uservar2; 
     private String uservar3;
 
-    public MobileResponse mapRkitResponseToCustomResponse(RkitMobileResponse rkitResponseParams){
-        MobileResponse response = new MobileResponse();
+    public RechargeRsponse mapRkitResponseToCustomResponse(RkitApiResponse rkitResponseParams){
+        RechargeRsponse response = new RechargeRsponse();
         
         response.setError(rkitResponseParams.getERROR());
         response.setStatus(rkitResponseParams.getSTATUS());

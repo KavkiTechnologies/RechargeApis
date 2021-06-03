@@ -8,7 +8,8 @@ import com.kavki.fastfxrechargeapis.Entity.Admin.RetailerEntity;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.DthRecharge;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.DthResponse;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.MobileRecharge;
-import com.kavki.fastfxrechargeapis.Entity.Recharge.RkitMobileResponse;
+import com.kavki.fastfxrechargeapis.Entity.Recharge.RechargeRsponse;
+import com.kavki.fastfxrechargeapis.Entity.Recharge.RkitApiResponse;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.RkitWalletBalance;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.TransactionIdGenerator;
 
@@ -34,9 +35,9 @@ public class RechargeService {
     @Autowired 
     private ClientListRepo cListRepo;
 
-    private static String baseUrl = "https://sandbox.rechargkit.biz/get/";
+    private static String baseUrl = "https://rechargkit.biz/get/";
 
-    public RkitMobileResponse prepaidRecharge(MobileRecharge rechargeObj){
+    public RkitApiResponse prepaidRecharge(MobileRecharge rechargeObj){
 
         try{
             String new_url = baseUrl + "prepaid/mobile";
@@ -55,7 +56,7 @@ public class RechargeService {
                 transId = new TransactionIdGenerator().generateTransId(rechargeObj.getClientId(),rechargeObj.getOperator_code(), rechargeObj.getCircle());
             }
             else{
-                RkitMobileResponse responseObj = new RkitMobileResponse();
+                RkitApiResponse responseObj = new RkitApiResponse();
                 responseObj.setMESSAGE("Call Service in proper way");
                 return responseObj;
             }
@@ -83,7 +84,7 @@ public class RechargeService {
             String jsonStr = responseUser.getBody();
             
             //converting json response from API to Response Obj
-            RkitMobileResponse responseObj = new ObjectMapper().readValue(jsonStr, RkitMobileResponse.class);
+            RkitApiResponse responseObj = new ObjectMapper().readValue(jsonStr, RkitApiResponse.class);
             return responseObj;
         }
         catch(Exception e)
@@ -92,7 +93,7 @@ public class RechargeService {
         } 
     }
 
-    public RkitMobileResponse postpaidRecharge(MobileRecharge rechargeObj) {
+    public RkitApiResponse postpaidRecharge(MobileRecharge rechargeObj) {
         try{
             String new_url = baseUrl + "postpaid/mobile";
             String clientId, transId, retailerId;
@@ -110,7 +111,7 @@ public class RechargeService {
                 transId = new TransactionIdGenerator().generateTransId(rechargeObj.getClientId(),rechargeObj.getOperator_code(), rechargeObj.getCircle());
             }
             else{
-                RkitMobileResponse responseObj = new RkitMobileResponse();
+                RkitApiResponse responseObj = new RkitApiResponse();
                 responseObj.setMESSAGE("Call Service in proper way");
                 return responseObj;
             }
@@ -137,7 +138,7 @@ public class RechargeService {
             String jsonStr = responseUser.getBody();
             
             //converting json response from API to Response Obj
-            RkitMobileResponse responseObj = new ObjectMapper().readValue(jsonStr, RkitMobileResponse.class);
+            RkitApiResponse responseObj = new ObjectMapper().readValue(jsonStr, RkitApiResponse.class);
             return responseObj;
         }
         catch(Exception e)
@@ -146,7 +147,7 @@ public class RechargeService {
         } 
     }
 
-    public DthResponse dthRecharge(DthRecharge rechargeObj) {
+    public RkitApiResponse dthRecharge(DthRecharge rechargeObj) {
         try{
             String new_url = baseUrl + "/dth";
             String clientId, transId, retailerId;
@@ -157,16 +158,14 @@ public class RechargeService {
             if(retailerId != null){
                 clientId = rLoginRepo.findByRetailerId(retailerId);
                 rechargeObj.setClientId(clientId);
-               // needs to be modified
-                transId = new TransactionIdGenerator().generateTransId(rechargeObj.getRetailerId(),rechargeObj.getOperator_code(), rechargeObj.getOperator_code());
+                transId = new TransactionIdGenerator().generateTransId(rechargeObj.getRetailerId(),rechargeObj.getOperator_code(), 0);
             }
             else if(clientId !=null && retailerId == null){
                 rechargeObj.setRetailerId("self");
-                // needs to be modified
-                transId = new TransactionIdGenerator().generateTransId(rechargeObj.getClientId(),rechargeObj.getOperator_code(), rechargeObj.getOperator_code());
+                transId = new TransactionIdGenerator().generateTransId(rechargeObj.getClientId(),rechargeObj.getOperator_code(), 0);
             }
             else{
-                DthResponse responseObj = new DthResponse();
+                RkitApiResponse responseObj = new RkitApiResponse();
                 responseObj.setMESSAGE("Call Service in proper way");
                 return responseObj;
             }
@@ -177,28 +176,28 @@ public class RechargeService {
             .queryParam("customer_id", rechargeObj.getCustomer_id())
             .queryParam("operator_code", rechargeObj.getOperator_code())
             .queryParam("amount", rechargeObj.getAmount())
-            .queryParam("partner_request_id", rechargeObj.getPartner_request_id())
-            //.queryParam("customer_email", rechargeObj.getCustomer_email())
+            .queryParam("partner_request_id", transId)
+            .queryParam("customer_email", rechargeObj.getCustomer_email())
             .queryParam("user_va1", rechargeObj.getUser_var1())
             .queryParam("user_var2",rechargeObj.getUser_var2())
             .queryParam("user_var3",rechargeObj.getUser_var3());
 
+            System.out.println("URL: "+uriBuilder.toUriString()+"\n");
             //Consuming Recharge API for GET 
-            System.out.println("URL: "+uriBuilder.toString());
             ResponseEntity<String> responseUser = restTemplate.exchange(uriBuilder.toUriString() ,
                     HttpMethod.GET,
                     null,
                     String.class);
             String jsonStr = responseUser.getBody();
-            
+            System.out.println("js: "+jsonStr+"\n");
             //converting json response from API to Response Obj
-            DthResponse responseObj = new ObjectMapper().readValue(jsonStr, DthResponse.class);
-            //System.out.println(responseObj);
+            RkitApiResponse responseObj = new ObjectMapper().readValue(jsonStr, RkitApiResponse.class);
+            System.out.println(responseObj);
             return responseObj;
         }
         catch(Exception e)
         {
-            return null;
+           return null;
         } 
     }
 
@@ -226,13 +225,9 @@ public class RechargeService {
         }
     }
 
-    public String checkUserBalance(MobileRecharge requestParams) {
-        String clientId, retailerId;
+    public String checkUserBalance(String clientId, String retailerId, int amount) {
         Float rechargeAmount, currentBalance, updatedBalance;
-
-        retailerId = requestParams.getRetailerId();
-        clientId = requestParams.getClientId();
-        rechargeAmount = (float) requestParams.getAmount();
+        rechargeAmount = (float) amount;
 
         if(retailerId!=null)
         {
@@ -267,4 +262,38 @@ public class RechargeService {
             return "Call service in proper way";
         }
     }
+
+    public RkitApiResponse getOrderStatus(RechargeRsponse params) {
+        try{
+            String new_url = baseUrl + "orderstatus";
+            UriComponentsBuilder uriBuilder  = UriComponentsBuilder.fromUriString(new_url)
+            // Add query parameter to url 
+            .queryParam("partner_id", env.getProperty("fastfx.partner_id"))
+            .queryParam("api_password",env.getProperty("fastfx.api_password"))
+            .queryParam("order_id", params.getOrderid())
+            .queryParam("user_var1", params.getUservar1())
+            .queryParam("user_var2",params.getUservar2())
+            .queryParam("user_var3",params.getUservar3());
+            
+            System.out.println("URL: "+uriBuilder.toUriString()+"\n");
+            ResponseEntity<String> responseUser = restTemplate.exchange(uriBuilder.toUriString() ,
+                    HttpMethod.GET,
+                    null,
+                    String.class);
+            String jsonStr = responseUser.getBody();
+            System.out.println("RES: "+jsonStr+"\n");
+            RkitApiResponse responseObj = new ObjectMapper().readValue(jsonStr, RkitApiResponse.class); // converting Json to java Object
+            System.out.println("RESOBj: "+responseObj+"\n");
+            return responseObj;
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+   
+
+    
 }

@@ -8,10 +8,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.stereotype.Component;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Component
-public class RkitMobileResponse {
+public class RkitApiResponse {
     
     @JsonProperty("ERROR") 
     private int eRROR;

@@ -70,11 +70,12 @@ public class ClientController {
     public String loadMoney(@RequestBody LoadMoney loadMoney){
         DateGenerator date = new DateGenerator();
         loadMoney.setReqDate(date.getTimeStamp());
-        System.out.println("Load: "+loadMoney);
+        loadMoney.setStatus("pending");
+        //System.out.println("Load: "+loadMoney);
         portalServices.loadMoneyRequest(loadMoney);
-        portalServices.sendEmail("rawatchetan133@gmail.com", "Prefund Uploaded",loadMoney);
-       // return "Request Submitted, please contact the admin !";
-       return "true";
+        // portalServices.sendEmail("rawatchetan133@gmail.com", "Prefund Uploaded",loadMoney);
+        // return "Request Submitted, please contact the admin !";
+        return "true";
     }
 
     @GetMapping("/paymentsummery/{clientId}")

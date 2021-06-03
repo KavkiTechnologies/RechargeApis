@@ -28,6 +28,5 @@ public class DthResponse {
     public String uSERVAR2;
     @JsonProperty("USERVAR3") 
     public String uSERVAR3;
-    @JsonProperty("COMMISSION") 
-    public String cOMMISSION;
+    
 }

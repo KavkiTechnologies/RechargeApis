@@ -107,4 +107,13 @@ public class RechargeController {
           return response;
         }
     }
+
+    @PostMapping("/ottplans")
+    public OttPlansResponse getPlanDetails(@RequestBody OttPlans plans){
+      //return apiService.fetchPlans(plans);
+      return apiService.fetchPlans(plans);
+
+    }
 }
+
+

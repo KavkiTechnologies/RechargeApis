@@ -8,6 +8,8 @@ import com.kavki.fastfxrechargeapis.Entity.Admin.RetailerEntity;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.DthRecharge;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.DthResponse;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.MobileRecharge;
+import com.kavki.fastfxrechargeapis.Entity.Recharge.OttPlans;
+import com.kavki.fastfxrechargeapis.Entity.Recharge.OttPlansResponse;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.RechargeRsponse;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.RkitApiResponse;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.RkitWalletBalance;
@@ -35,7 +37,7 @@ public class RechargeService {
     @Autowired 
     private ClientListRepo cListRepo;
 
-    private static String baseUrl = "https://rechargkit.biz/get/";
+    private static String baseUrl = "https://sandbox.rechargkit.biz/get/";
 
     public RkitApiResponse prepaidRecharge(MobileRecharge rechargeObj){
 
@@ -131,12 +133,13 @@ public class RechargeService {
             .queryParam("user_var3",rechargeObj.getUser_var3());
 
             //Consuming Recharge API for GET 
+            System.out.println("URL: "+uriBuilder.toUriString()+"\n");
             ResponseEntity<String> responseUser = restTemplate.exchange(uriBuilder.toUriString() ,
                     HttpMethod.GET,
                     null,
                     String.class);
             String jsonStr = responseUser.getBody();
-            
+            System.out.println("json "+jsonStr);
             //converting json response from API to Response Obj
             RkitApiResponse responseObj = new ObjectMapper().readValue(jsonStr, RkitApiResponse.class);
             return responseObj;
@@ -293,7 +296,34 @@ public class RechargeService {
         }
     }
 
-   
+    public OttPlansResponse fetchPlans(OttPlans plans) {
+        try{
+            String new_url = "https://dev.rechargkit.biz/ott/planDetailsget";
+            UriComponentsBuilder uriBuilder  = UriComponentsBuilder.fromUriString(new_url)
+            // Add query parameter to url 
+            .queryParam("partner_id", env.getProperty("fastfx.partner_id"))
+            .queryParam("api_password","1234abcd")
+            .queryParam("operator_code", plans.getOperator_code());
+            
+            
+            System.out.println("URL: "+uriBuilder.toUriString()+"\n");
+            ResponseEntity<String> responseUser = restTemplate.exchange(uriBuilder.toUriString() ,
+                    HttpMethod.GET,
+                    null,
+                    String.class);
+            String jsonStr = responseUser.getBody();
+            System.out.println("RES: "+jsonStr+"\n");
+            OttPlansResponse responseObj = new ObjectMapper().readValue(jsonStr, OttPlansResponse.class); // converting Json to java Object
+            System.out.println("RESOBj: "+responseObj+"\n");
+            return responseObj;
+    }
+    catch(Exception e)
+    {
+        e.getMessage();
+        return null;
+    }
+
+}
 
     
 }

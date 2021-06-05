@@ -107,7 +107,7 @@ public class AdminPortalServices {
         System.out.println("DETAILS: "+updatePrefund+"\n");
         System.out.println(ClientId+" "+addbalance+" "+prefundStatus);
 
-        if(updatePrefund.getStatus()==null && prefundStatus.equals("accept")){
+        if(updatePrefund.getStatus().equals("pending") && prefundStatus.equals("accept")){
             ClientEntity client = cListRepo.findById(ClientId).orElse(null);
             float currentBalance = client.getBalance();
             float newBalance = currentBalance + addbalance;
@@ -116,7 +116,7 @@ public class AdminPortalServices {
             summeryRepo.save(updatePrefund);
             cListRepo.save(client);
         }
-        else if(updatePrefund.getStatus()==null & prefundStatus.equals("decline")){
+        else if(updatePrefund.getStatus().equals("pending") & prefundStatus.equals("decline")){
             updatePrefund.setStatus("rejected");
             summeryRepo.save(updatePrefund);
         }

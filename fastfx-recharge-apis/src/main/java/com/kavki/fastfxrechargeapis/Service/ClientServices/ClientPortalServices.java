@@ -157,7 +157,7 @@ public class ClientPortalServices  {
             System.out.println("DETAILS: "+updatePrefund+"\n");
             System.out.println(RetailerId+" "+addbalance+" "+prefundStatus);
     
-            if(updatePrefund.getStatus()==null && prefundStatus.equals("accept")){
+            if(updatePrefund.getStatus().equals("pending") && prefundStatus.equals("accept")){
                 RetailerEntity retailer = rListRepo.findById(RetailerId).orElse(null);
                 System.out.println(retailer);
                 float currentBalance = retailer.getBalance();
@@ -168,7 +168,7 @@ public class ClientPortalServices  {
                 summeryRepo.save(updatePrefund);
                 rListRepo.save(retailer);
             }
-            else if(updatePrefund.getStatus()==null & prefundStatus.equals("decline")){
+            else if(updatePrefund.getStatus().equals("pending") & prefundStatus.equals("decline")){
                 updatePrefund.setStatus("rejected");
                 summeryRepo.save(updatePrefund);
             }

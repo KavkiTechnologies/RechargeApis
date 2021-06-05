@@ -17,7 +17,7 @@ public class TransactionEntity {
     private int Sno;
     @Column(name= "Transaction_Id", nullable = false)
     private String TransactionId;
-    @Column(name= "Client_ID", nullable = false)
+    @Column(name= "Client_Id", nullable = false)
     private String ClientId;
     @Column(name="Retailer_Id")
     private String RetailerId;
@@ -35,6 +35,8 @@ public class TransactionEntity {
     private String Description;
     @Column(name= "Amount", nullable = false)
     private int Amount;
+    @Column(name= "Orderid", nullable = false)
+    private String OrderId;
     @Column(name= "Reference_No", nullable = false)
     private String ReferenceNo;
     @Column(name="Fastfx_Commission",nullable=false)

@@ -16,6 +16,7 @@ public class OttPlans {
     private int operator_code;
     private String clientId;
     private String retailerId;
+    private String customer_email;
    
     
     public int plan_id;

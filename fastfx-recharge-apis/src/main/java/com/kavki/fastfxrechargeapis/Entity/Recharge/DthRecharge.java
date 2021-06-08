@@ -16,7 +16,7 @@ public class DthRecharge {
     private int operator_code;
     private int amount;
     private String partner_request_id;
-    private String customer_email;
+    //private String customer_email;
     private String clientId;
     private String retailerId;
     private String user_var1;

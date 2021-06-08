@@ -15,6 +15,8 @@ public class RkitApiResponse {
     
     @JsonProperty("ERROR") 
     private int eRROR;
+    @JsonProperty("SUCCESS")
+    private int sUCCESS;
     @JsonProperty("STATUS") 
     private int sTATUS;
     @JsonProperty("ORDERID") 

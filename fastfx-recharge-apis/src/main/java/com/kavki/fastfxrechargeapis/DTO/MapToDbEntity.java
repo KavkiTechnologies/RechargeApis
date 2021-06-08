@@ -108,7 +108,7 @@ public class MapToDbEntity {
         dbEntity.setNumber(Integer.parseInt(requestParams.getCustomer_id()));
         dbEntity.setOperatorCode(requestParams.getOperator_code());
         dbEntity.setAmount(requestParams.getAmount());
-        dbEntity.setCircle(0);
+        dbEntity.setCircle(0);  // dth has no circle code so zero
         dbEntity.setRechargeType("Dth Normal");
         dbEntity.setERROR(responseParams.getERROR());
         dbEntity.setStatus(responseParams.getSTATUS());

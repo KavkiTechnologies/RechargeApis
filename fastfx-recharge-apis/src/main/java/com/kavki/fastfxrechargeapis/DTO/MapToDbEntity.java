@@ -24,6 +24,7 @@ import lombok.NoArgsConstructor;
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="clientId",type= String.class),
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="rechargeNumber",type= Long.class),
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="operatorCode",type= Integer.class),
+                  @StoredProcedureParameter(mode=ParameterMode.IN,name="operatorName",type= String.class),
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="amount",type= Integer.class),
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="circle",type= Integer.class),
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="rechargeType",type= String.class),
@@ -52,6 +53,8 @@ public class MapToDbEntity {
     private long orderId;
     @Column(name="operator_code")
     private int operatorCode;
+    @Column(name="operator_name")
+    private String operatorName;
     @Column(name="amount")
     private int amount;
     @Column(name="circle")

@@ -59,9 +59,11 @@ public class RechargeController {
           databaseEntity.setTransDate(date.getTimeStamp()); //adding current transaction date
           databaseEntity.setCharge("0.00"); // prepaid apis don't have charge amount
           databaseEntity.setServiceProvider("Rkit"); //adding Service Provider for this api
+          // setting operator name based on operator code 
+          databaseEntity.setOperatorName(operatorCodes.getOperator(requestParams.getOperator_code())); 
           System.out.println("DB after: "+databaseEntity+"\n");
          // System.out.println(operatorCodes.getOperator(requestParams.getOperator_code()));
-         transProcedure.callTransactionProcedure(databaseEntity); // calling transaction procedure
+          transProcedure.callTransactionProcedure(databaseEntity); // calling transaction procedure
           return response.mapRkitResponseToCustomResponse(rkitResponse);
         }
         else{
@@ -82,6 +84,7 @@ public class RechargeController {
         databaseEntity.setServiceType("Postpaid"); // adding service type 
         databaseEntity.setTransDate(date.getTimeStamp()); //adding current transaction date
         databaseEntity.setServiceProvider("Rkit"); //adding Service Provider for this api
+        databaseEntity.setOperatorName(operatorCodes.getOperator(requestParams.getOperator_code())); // setting operator name based on operator code 
         transProcedure.callTransactionProcedure(databaseEntity); // calling transaction procedure
         return response.mapRkitResponseToCustomResponse(rkitResponse);
       }
@@ -103,6 +106,7 @@ public class RechargeController {
           databaseEntity.setServiceType("Dth"); // adding service type 
           databaseEntity.setTransDate(date.getTimeStamp()); //adding current transaction date
           databaseEntity.setServiceProvider("Rkit");  //adding Service Provider for this api
+          databaseEntity.setOperatorName(operatorCodes.getOperator(requestParams.getOperator_code())); // setting operator name based on operator code 
           System.out.println("db: "+databaseEntity+"\n");
           transProcedure.callTransactionProcedure(databaseEntity); // calling transaction procedure
           return response.mapRkitResponseToCustomResponse(rkitResponse);      

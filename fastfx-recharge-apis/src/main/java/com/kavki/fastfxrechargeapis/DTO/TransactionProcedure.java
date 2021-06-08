@@ -19,6 +19,7 @@ public class TransactionProcedure {
                                                     .setParameter("clientId",db.getClientId())
                                                     .setParameter("rechargeNumber",db.getNumber()) // mobile or vc Number
                                                     .setParameter("operatorCode",db.getOperatorCode())
+                                                    .setParameter("operatorName",db.getOperatorName())
                                                     .setParameter("amount",db.getAmount())
                                                     .setParameter("circle", db.getCircle())
                                                     .setParameter("rechargeType", db.getRechargeType())

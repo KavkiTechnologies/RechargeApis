@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 import com.kavki.fastfxrechargeapis.Entity.Recharge.DthRecharge;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.MobileRecharge;
+import com.kavki.fastfxrechargeapis.Entity.Recharge.OttRecharge;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.RkitApiResponse;
 
 import org.springframework.stereotype.Component;
@@ -123,5 +124,26 @@ public class MapToDbEntity {
         dbEntity.setRetailerId(requestParams.getRetailerId());
         dbEntity.setCharge(responseParams.getCHARGE());
         return dbEntity;
-}
+    }
+
+    
+    public MapToDbEntity mapOttToDbEntity(OttRecharge requestParams, RkitApiResponse responseParams){
+        MapToDbEntity dbEntity = new MapToDbEntity();
+        dbEntity.setPartner_request_id(responseParams.getPARTNERREQID());
+        dbEntity.setNumber(requestParams.getMobile_no());
+        dbEntity.setOperatorCode(requestParams.getOperator_code());
+        dbEntity.setAmount(requestParams.getAmount());
+        dbEntity.setCircle(0); 
+        dbEntity.setRechargeType("OTT Normal");
+        dbEntity.setERROR(responseParams.getERROR());
+        dbEntity.setStatus(responseParams.getSTATUS());
+        dbEntity.setOrderId(responseParams.getORDERID());
+        dbEntity.setOptransId(responseParams.getOPTRANSID());
+        dbEntity.setMessage(responseParams.getMESSAGE());
+        dbEntity.setCommission(responseParams.getCOMMISSION());
+        dbEntity.setClientId(requestParams.getClientId());
+        dbEntity.setRetailerId(requestParams.getRetailerId());
+        dbEntity.setCharge(responseParams.getCHARGE());
+        return dbEntity;
+    }
 }

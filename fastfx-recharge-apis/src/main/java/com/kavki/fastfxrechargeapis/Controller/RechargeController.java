@@ -125,14 +125,25 @@ public class RechargeController {
 
     @PostMapping("/ott")
     public RechargeRsponse dOttRecharge(@RequestBody OttRecharge requestParams){
+      String message = apiService.checkUserBalance(requestParams.getClientId(), requestParams.getRetailerId(), requestParams.getAmount());
+        if(message.equals("balance updated")){
       System.out.println(requestParams);
       rkitResponse = apiService.ottRecharge(requestParams);
-
-
-
-
       
+      System.out.println("RkitResponse: "+rkitResponse+"\n");
+      MapToDbEntity databaseEntity = dbEntityMapper.mapOttToDbEntity(requestParams, rkitResponse);
+      databaseEntity.setServiceType("Ott"); // adding service type 
+      databaseEntity.setTransDate(date.getTimeStamp()); //adding current transaction date
+      databaseEntity.setServiceProvider("Rkit");  //adding Service Provider for this api
+      databaseEntity.setOperatorName(operatorCodes.getOperator(requestParams.getOperator_code())); // setting operator name based on operator code 
+      System.out.println("db: "+databaseEntity+"\n");
+      transProcedure.callTransactionProcedure(databaseEntity);
       return response.mapRkitResponseToCustomResponse(rkitResponse);
+        }
+        else{
+          response.setMessage(message);
+          return response;
+        }
     
     }
 }

@@ -15,4 +15,5 @@ public class OttRecharge {
     private String customer_email;
     private String retailerId;
     private String clientId;
+    private int amount;
 }

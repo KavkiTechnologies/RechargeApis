@@ -1,5 +1,7 @@
 package com.kavki.fastfxrechargeapis.Controller;
 
+import java.util.List;
+
 import com.kavki.fastfxrechargeapis.DTO.MapToDbEntity;
 import com.kavki.fastfxrechargeapis.DTO.TransactionProcedure;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.*;
@@ -118,22 +120,48 @@ public class RechargeController {
     }
 
     @PostMapping("/ottplans")
-    public OttPlansResponse getPlanDetails(@RequestBody OttPlans plans){
+    public OttPlans getPlanDetails(@RequestBody OttRecharge plans){
       //return apiService.fetchPlans(plans);
-      return apiService.fetchPlans(plans);
+      return apiService.fetchPlans(plans.getOperator_code());
     }
 
     @PostMapping("/ott")
     public RechargeRsponse dOttRecharge(@RequestBody OttRecharge requestParams){
-      System.out.println(requestParams);
-      rkitResponse = apiService.ottRecharge(requestParams);
+      // getting recharge amount based on operator_code and plan_id 
+      int planId = requestParams.getPlan_id();
+      boolean valid_request = false;
+      OttPlans plans = apiService.fetchPlans(requestParams.getOperator_code());
+      System.out.println("plans: "+plans);
+      List<OttPlansData> list = plans.getDATA();
+      for (OttPlansData planDetails : list) { 
+        if(planDetails.plan_id == planId){
+          requestParams.setAmount(planDetails.amount);
+          valid_request = true;
+        }
+      }
+      if(valid_request==false){
+        response.setMessage("plan_id doesn't match for the operator code");
+        return response;
+      }
+      String message = apiService.checkUserBalance(requestParams.getClientId(), requestParams.getRetailerId(), requestParams.getAmount());
+        if(message.equals("balance updated")){
+          System.out.println("REQ PARAMS: "+requestParams+"\n");
+          rkitResponse = apiService.ottRecharge(requestParams);
+          //System.out.println("RkitResponse: "+rkitResponse+"\n");
+          MapToDbEntity databaseEntity = dbEntityMapper.mapOttToDbEntity(requestParams, rkitResponse);
+          databaseEntity.setServiceType("Ott"); // adding service type 
+          databaseEntity.setTransDate(date.getTimeStamp()); //adding current transaction date
+          databaseEntity.setServiceProvider("Rkit");  //adding Service Provider for this api
+          databaseEntity.setOperatorName(operatorCodes.getOperator(requestParams.getOperator_code())); // setting operator name based on operator code 
+          //System.out.println("ott db: "+databaseEntity+"\n");
+          transProcedure.callTransactionProcedure(databaseEntity);
+          return response.mapRkitResponseToCustomResponse(rkitResponse);
 
-
-
-
-      
-      return response.mapRkitResponseToCustomResponse(rkitResponse);
-    
+        }
+        else{
+            response.setMessage(message);
+            return response;
+        }
     }
 }
 

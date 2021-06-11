@@ -14,5 +14,4 @@ public class TransactionIdGenerator {
         String TransId = prefix+date+mid+suffix;
         return TransId;
     }
-    
-}
+  }

@@ -22,7 +22,7 @@ public class RkitApiResponse {
     @JsonProperty("ORDERID") 
     private int oRDERID;
     @JsonProperty("OPTRANSID") 
-    private long oPTRANSID;
+    private String oPTRANSID;
     @JsonProperty("PARTNERREQID") 
     private String pARTNERREQID;
     @JsonProperty("MESSAGE") 

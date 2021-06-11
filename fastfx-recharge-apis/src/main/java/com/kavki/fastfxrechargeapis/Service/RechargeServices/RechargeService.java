@@ -8,8 +8,8 @@ import com.kavki.fastfxrechargeapis.Entity.Admin.RetailerEntity;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.DthRecharge;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.DthResponse;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.MobileRecharge;
+import com.kavki.fastfxrechargeapis.Entity.Recharge.OttPlansData;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.OttPlans;
-import com.kavki.fastfxrechargeapis.Entity.Recharge.OttPlansResponse;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.OttRecharge;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.RechargeRsponse;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.RkitApiResponse;
@@ -71,7 +71,7 @@ public class RechargeService {
             .queryParam("mobile_no", rechargeObj.getMobile_no())
             .queryParam("operator_code", rechargeObj.getOperator_code())
             .queryParam("amount", rechargeObj.getAmount())
-            .queryParam("partner_request_id", transId) // passing our transaction Id
+            .queryParam("partner_request_id",  transId) // passing our transaction Id
             .queryParam("circle", rechargeObj.getCircle())
             .queryParam("recharge_type", rechargeObj.getRecharge_type())
             .queryParam("user_var1",rechargeObj.getUser_var1())
@@ -132,21 +132,17 @@ public class RechargeService {
             .queryParam("user_var1",rechargeObj.getUser_var1())
             .queryParam("user_var2",rechargeObj.getUser_var2())
             .queryParam("user_var3",rechargeObj.getUser_var3());
-
             //Consuming Recharge API for GET 
-            System.out.println("URL: "+uriBuilder.toUriString()+"\n");
             ResponseEntity<String> responseUser = restTemplate.exchange(uriBuilder.toUriString() ,
                     HttpMethod.GET,
                     null,
                     String.class);
             String jsonStr = responseUser.getBody();
-            System.out.println("json "+jsonStr);
             //converting json response from API to Response Obj
             RkitApiResponse responseObj = new ObjectMapper().readValue(jsonStr, RkitApiResponse.class);
             return responseObj;
         }
-        catch(Exception e)
-        {
+        catch(Exception e){
             return null;
         } 
     }
@@ -185,21 +181,17 @@ public class RechargeService {
             .queryParam("user_var2",rechargeObj.getUser_var2())
             .queryParam("user_var3",rechargeObj.getUser_var3());
 
-            System.out.println("URL: "+uriBuilder.toUriString()+"\n");
             //Consuming Recharge API for GET 
             ResponseEntity<String> responseUser = restTemplate.exchange(uriBuilder.toUriString() ,
                     HttpMethod.GET,
                     null,
                     String.class);
             String jsonStr = responseUser.getBody();
-            System.out.println("js: "+jsonStr+"\n");
             //converting json response from API to Response Obj
             RkitApiResponse responseObj = new ObjectMapper().readValue(jsonStr, RkitApiResponse.class);
-            System.out.println(responseObj);
             return responseObj;
         }
-        catch(Exception e)
-        {
+        catch(Exception e){
            return null;
         } 
     }
@@ -212,7 +204,6 @@ public class RechargeService {
             .queryParam("partner_id", env.getProperty("fastfx.partner_id"))
             .queryParam("api_password",env.getProperty("fastfx.api_password"));
 
-            System.out.println("URL: "+uriBuilder.toUriString());
             ResponseEntity<String> responseUser = restTemplate.exchange(uriBuilder.toUriString() ,
                     HttpMethod.GET,
                     null,
@@ -221,9 +212,7 @@ public class RechargeService {
             RkitWalletBalance responseObj = new ObjectMapper().readValue(jsonStr, RkitWalletBalance.class); // converting Json to java Object
             return responseObj.getWALLET_BALANCE();
         }
-        catch(Exception e)
-        {
-            System.out.println(e.getMessage());
+        catch(Exception e){
             return null;
         }
     }
@@ -277,61 +266,50 @@ public class RechargeService {
             .queryParam("user_var1", params.getUservar1())
             .queryParam("user_var2",params.getUservar2())
             .queryParam("user_var3",params.getUservar3());
-            
-            System.out.println("URL: "+uriBuilder.toUriString()+"\n");
             ResponseEntity<String> responseUser = restTemplate.exchange(uriBuilder.toUriString() ,
                     HttpMethod.GET,
                     null,
                     String.class);
             String jsonStr = responseUser.getBody();
-            System.out.println("RES: "+jsonStr+"\n");
             RkitApiResponse responseObj = new ObjectMapper().readValue(jsonStr, RkitApiResponse.class); // converting Json to java Object
-            System.out.println("RESOBj: "+responseObj+"\n");
             return responseObj;
         }
-        catch(Exception e)
-        {
-            System.out.println(e.getMessage());
+        catch(Exception e){
             return null;
         }
     }
 
-    public OttPlansResponse fetchPlans(OttPlans plans) {
+    public OttPlans fetchPlans(int operator_code) {
         try{
-            String new_url = "https://dev.rechargkit.biz/ott/planDetailsget";
+            String new_url = "https://rechargkit.biz/ott/planDetailsget";
             UriComponentsBuilder uriBuilder  = UriComponentsBuilder.fromUriString(new_url)
             // Add query parameter to url 
             .queryParam("partner_id", env.getProperty("fastfx.partner_id"))
-            .queryParam("api_password","1234abcd")
-            .queryParam("operator_code", plans.getOperator_code());
+            .queryParam("api_password",env.getProperty("fastfx.api_password"))
+            .queryParam("operator_code",operator_code);
             
-            
-            System.out.println("URL: "+uriBuilder.toUriString()+"\n");
             ResponseEntity<String> responseUser = restTemplate.exchange(uriBuilder.toUriString() ,
                     HttpMethod.GET,
                     null,
                     String.class);
             String jsonStr = responseUser.getBody();
-            System.out.println("RES: "+jsonStr+"\n");
-            OttPlansResponse responseObj = new ObjectMapper().readValue(jsonStr, OttPlansResponse.class); // converting Json to java Object
-            System.out.println("RESOBj: "+responseObj+"\n");
+            OttPlans responseObj = new ObjectMapper().readValue(jsonStr, OttPlans.class); // converting Json to java Object
             return responseObj;
-    }
-    catch(Exception e)
-    {
-        e.getMessage();
-        return null;
-    }
+        }
+        catch(Exception e){
+            return null;
+        }
 
-}
-
+    }
+    
     public RkitApiResponse ottRecharge(OttRecharge rechargeObj) {
         try{
-            String new_url = "https://dev.rechargkit.biz/ott/createSubscriptionget";
+            String new_url = "https://rechargkit.biz/ott/createSubscriptionget";
             String clientId, transId, retailerId;
 
             retailerId = rechargeObj.getRetailerId();
             clientId = rechargeObj.getClientId();
+            System.out.println("params: "+rechargeObj);
             // genertaing transaction Id 
             if(retailerId != null){
                 clientId = rLoginRepo.findByRetailerId(retailerId);
@@ -347,10 +325,11 @@ public class RechargeService {
                 responseObj.setMESSAGE("Call Service in proper way");
                 return responseObj;
             }
+           
             UriComponentsBuilder uriBuilder  = UriComponentsBuilder.fromUriString(new_url)
             // Add query parameter to url 
             .queryParam("partner_id", env.getProperty("fastfx.partner_id"))
-            .queryParam("api_password", "1234abcd")
+            .queryParam("api_password",env.getProperty("fastfx.api_password"))
             .queryParam("operator_code", rechargeObj.getOperator_code())
             .queryParam("plan_id", rechargeObj.getPlan_id())
             .queryParam("mobile_no", rechargeObj.getMobile_no())
@@ -366,8 +345,9 @@ public class RechargeService {
             System.out.println("js: "+jsonStr+"\n");
             //converting json response from API to Response Obj
             RkitApiResponse responseObj = new ObjectMapper().readValue(jsonStr, RkitApiResponse.class);
-            System.out.println(responseObj);
+            System.out.println("jsObj: "+responseObj);
             return responseObj;
+            //return null;
         }
         catch(Exception e)
         {

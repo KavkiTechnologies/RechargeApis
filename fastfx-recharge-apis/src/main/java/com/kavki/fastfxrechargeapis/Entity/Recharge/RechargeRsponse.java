@@ -16,7 +16,7 @@ public class RechargeRsponse {
     private int error; 
     private int status;
     private int orderid;
-    private long referenceid; 
+    private String referenceid; 
     private String transactionid; 
     private String message;
     private String uservar1; 

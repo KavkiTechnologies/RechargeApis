@@ -281,7 +281,7 @@ public class RechargeService {
 
     public OttPlans fetchPlans(int operator_code) {
         try{
-            String new_url = "https://rechargkit.biz/ott/planDetailsget";
+            String new_url = "https://dev.rechargkit.biz/ott/planDetailsget";
             UriComponentsBuilder uriBuilder  = UriComponentsBuilder.fromUriString(new_url)
             // Add query parameter to url 
             .queryParam("partner_id", env.getProperty("fastfx.partner_id"))
@@ -304,7 +304,7 @@ public class RechargeService {
     
     public RkitApiResponse ottRecharge(OttRecharge rechargeObj) {
         try{
-            String new_url = "https://rechargkit.biz/ott/createSubscriptionget";
+            String new_url = "https://dev.rechargkit.biz/ott/createSubscriptionget";
             String clientId, transId, retailerId;
 
             retailerId = rechargeObj.getRetailerId();

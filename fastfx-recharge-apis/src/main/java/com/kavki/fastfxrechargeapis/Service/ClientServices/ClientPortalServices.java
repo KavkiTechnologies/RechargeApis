@@ -147,30 +147,45 @@ public class ClientPortalServices  {
         return  tListRepo.calcSuccessForClient(clientId);
     }
 
-    public void updateRetailerbalance(LoadMoney prefundDetails) {
-
+    public String updateRetailerbalance(LoadMoney prefundDetails) {
+            // capture the referene id & retailer Id for the specific load money request
             LoadMoney updatePrefund = summeryRepo.findByRetailerIdAndReference(prefundDetails.getRetailerId(), prefundDetails.getReference());
             String RetailerId = prefundDetails.getRetailerId();
-            Float addbalance = Float.parseFloat(updatePrefund.getAmount());
+            // retailer balance request
+            Float addRetailerbalance = Float.parseFloat(updatePrefund.getAmount());
             String prefundStatus = prefundDetails.getStatus();
             System.out.println("Pre DETAILS: "+prefundDetails+"\n");
             System.out.println("DETAILS: "+updatePrefund+"\n");
-            System.out.println(RetailerId+" "+addbalance+" "+prefundStatus);
-    
+            System.out.println(RetailerId+" "+addRetailerbalance+" "+prefundStatus);
+            String clientId = updatePrefund.getClientId();
+            Float clientBalance = Float.parseFloat(cListRepo.getWalletBalance(clientId));
+           
             if(updatePrefund.getStatus().equals("pending") && prefundStatus.equals("accept")){
+                if(clientBalance<addRetailerbalance){
+                    return "You don't have sufficient balance to process this request";
+                }
                 RetailerEntity retailer = rListRepo.findById(RetailerId).orElse(null);
                 System.out.println(retailer);
-                float currentBalance = retailer.getBalance();
-                float newBalance = currentBalance + addbalance;
-                System.out.println("BAL: "+currentBalance+" "+newBalance);
-                retailer.setBalance(newBalance);
+                //updating client Balance
+                Float updatedClientBalance = clientBalance - addRetailerbalance;
+                cListRepo.updateBalance(clientId, updatedClientBalance);
+                // updateRetailerBalance
+                float currentRetailerBalance = retailer.getBalance();
+                float newRetailerBalance = currentRetailerBalance + addRetailerbalance;
+                System.out.println("BAL: "+currentRetailerBalance+" "+newRetailerBalance);
+                retailer.setBalance(newRetailerBalance);
                 updatePrefund.setStatus("accepted");
                 summeryRepo.save(updatePrefund);
                 rListRepo.save(retailer);
+                return "Approved Balance update request";
             }
             else if(updatePrefund.getStatus().equals("pending") & prefundStatus.equals("decline")){
                 updatePrefund.setStatus("rejected");
                 summeryRepo.save(updatePrefund);
+            return "Rejected Balance update request";
+            }
+            else{
+                return "This request cannot be process, please connect to the admin!";
             }
         
     }

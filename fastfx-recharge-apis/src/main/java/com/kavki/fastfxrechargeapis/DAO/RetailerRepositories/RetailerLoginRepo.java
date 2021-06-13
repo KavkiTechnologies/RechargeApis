@@ -11,6 +11,6 @@ public interface RetailerLoginRepo extends JpaRepository<RetailerCredentials, St
     RetailerCredentials findByEmail(String email);
 
    @Query(value="Select client_Id from retailer_records where retailer_id =:retailerId", nativeQuery = true)
-    String findByRetailerId(String retailerId);
+   String findByRetailerId(String retailerId);
     
 }

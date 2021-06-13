@@ -94,7 +94,7 @@ public class ClientController {
     }
 
     @PostMapping("/updatebalance")
-    public void updateRetailerPrefund(@RequestBody LoadMoney prefundDetails){
-        portalServices.updateRetailerbalance(prefundDetails);
+    public String updateRetailerPrefund(@RequestBody LoadMoney prefundDetails){
+        return portalServices.updateRetailerbalance(prefundDetails);
     }
 }

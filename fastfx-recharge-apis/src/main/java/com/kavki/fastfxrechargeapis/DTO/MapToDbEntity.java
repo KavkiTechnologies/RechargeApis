@@ -39,7 +39,8 @@ import lombok.NoArgsConstructor;
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="transDate",type= String.class),
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="commission",type= String.class),
                   @StoredProcedureParameter(mode=ParameterMode.IN,name="retailerId",type= String.class),
-                  @StoredProcedureParameter(mode=ParameterMode.IN,name="charge",type= String.class)
+                  @StoredProcedureParameter(mode=ParameterMode.IN,name="charge",type= String.class),
+                  @StoredProcedureParameter(mode=ParameterMode.IN,name="refund",type= String.class)
                 })
                  
 @Component
@@ -84,6 +85,8 @@ public class MapToDbEntity {
     private String retailerId;
     @Column(name = "charge")
     private String charge;
+    @Column(name = "refund")
+    private String refund;
   
     // Mapping rechargeParameters & Rkit Response Parameters into one to be passed to the Transaction Stored Procedure
     public MapToDbEntity mapMobileToDbEntity(MobileRecharge requestParams, RkitApiResponse responseParams){

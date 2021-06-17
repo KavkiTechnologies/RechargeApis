@@ -110,28 +110,8 @@ public class ClientPortalServices  {
         return loadMoneyRepo.save(loadMoney);
     }
 
-    public void sendEmail(String to, String subject, LoadMoney loadMoney){
-
-        SimpleMailMessage email = new SimpleMailMessage();
-        // creating mail body
-        String clientId = loadMoney.getClientId();
-        ClientEntity details = cListRepo.findById(clientId).orElse(null);
-        
-        String body = "ClientId: "+ clientId +"\n" + "Client: " + details.getName() +"\n" + 
-                      "Mobile: "+  details.getMobileNo() +"\n" + "EmailId: " + details.getEmailId() +"\n" + "Current Balance: " + details.getBalance()+"\n\n\n" +
-                      "Money Loaded by Client: "+"\n" +
-                      "Amount: "+loadMoney.getAmount()+"\n" + "Type: "+ loadMoney.getType() + "\n" + "Client Bank: "+ loadMoney.getFromBank()+ "\n" +
-                      "Client Account: " + loadMoney.getFromAccount() + "\n" + "Reference: " + loadMoney.getReference();      
-
-        email.setTo(to);
-        email.setSubject(subject);
-        email.setText(body);
-        javaMailSender.send(email);
-
-    }
-
     public List<LoadMoney> getSummery(String clientId) {
-        return summeryRepo.findByClientId(clientId);
+        return summeryRepo.findByClientIdAndRetailerId(clientId,"self");
     }
 
     public String getWalletBalance(String clientId) {
@@ -177,16 +157,37 @@ public class ClientPortalServices  {
                 updatePrefund.setStatus("accepted");
                 summeryRepo.save(updatePrefund);
                 rListRepo.save(retailer);
-                return "Approved Balance update request";
+                return "Balance Update Request Approved!";
             }
             else if(updatePrefund.getStatus().equals("pending") & prefundStatus.equals("decline")){
                 updatePrefund.setStatus("rejected");
                 summeryRepo.save(updatePrefund);
-            return "Rejected Balance update request";
+            return "Balance Update Request Rejected!";
             }
             else{
-                return "This request cannot be process, please connect to the admin!";
+                return "This request cannot be processed, please connect to the admin!";
             }
         
     }
+
+    public void sendEmail(String to, String subject, LoadMoney loadMoney){
+
+        SimpleMailMessage email = new SimpleMailMessage();
+        // creating mail body
+        String clientId = loadMoney.getClientId();
+        ClientEntity details = cListRepo.findById(clientId).orElse(null);
+        
+        String body = "ClientId: "+ clientId +"\n" + "Client: " + details.getName() +"\n" + 
+                      "Mobile: "+  details.getMobileNo() +"\n" + "EmailId: " + details.getEmailId() +"\n" + "Current Balance: " + details.getBalance()+"\n\n\n" +
+                      "Money Loaded by Client: "+"\n" +
+                      "Amount: "+loadMoney.getAmount()+"\n" + "Type: "+ loadMoney.getType() + "\n" + "Client Bank: "+ loadMoney.getFromBank()+ "\n" +
+                      "Client Account: " + loadMoney.getFromAccount() + "\n" + "Reference: " + loadMoney.getReference();      
+
+        email.setTo(to);
+        email.setSubject(subject);
+        email.setText(body);
+        javaMailSender.send(email);
+
+    }
+
 }

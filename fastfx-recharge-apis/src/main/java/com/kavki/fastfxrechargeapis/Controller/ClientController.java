@@ -71,6 +71,7 @@ public class ClientController {
         DateGenerator date = new DateGenerator();
         loadMoney.setReqDate(date.getTimeStamp());
         loadMoney.setStatus("pending");
+        loadMoney.setRetailerId("self");
         //System.out.println("Load: "+loadMoney);
         portalServices.loadMoneyRequest(loadMoney);
         // portalServices.sendEmail("rawatchetan133@gmail.com", "Prefund Uploaded",loadMoney);

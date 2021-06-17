@@ -64,9 +64,9 @@ public class RetailerController {
         DateGenerator date = new DateGenerator();
         loadMoney.setReqDate(date.getTimeStamp());
         loadMoney.setStatus("pending");
-        System.out.println("Load: "+loadMoney+"\n");
+        //System.out.println("Load: "+loadMoney+"\n");
         portalServices.loadMoneyRequest(loadMoney);
-        System.out.println("DONE");
+        //System.out.println("DONE");
         //portalServices.sendEmail("rawatchetan133@gmail.com", "Prefund Uploaded",loadMoney);
       //  return "Request Submitted, please contact your client !";
       return "true";

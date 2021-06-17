@@ -33,7 +33,8 @@ public class TransactionProcedure {
                                                     .setParameter("transDate",db.getTransDate())
                                                     .setParameter("commission", db.getCommission())
                                                     .setParameter("retailerId", db.getRetailerId())
-                                                    .setParameter("charge", db.getCharge()).execute();
+                                                    .setParameter("charge", db.getCharge())
+                                                    .setParameter("refund", db.getRefund()).execute();
     }
   
 }

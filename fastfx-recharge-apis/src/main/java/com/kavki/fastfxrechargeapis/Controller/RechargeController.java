@@ -46,14 +46,12 @@ public class RechargeController {
     
     @PostMapping("/prepaid")
     public RechargeRsponse doPrepaidRecharge(@RequestBody MobileRecharge requestParams){ 
-            
       // verify user balance 
       String message = apiService.checkUserBalance(requestParams.getClientId(), requestParams.getRetailerId(), requestParams.getAmount());
         // if req user balance is present, rechagre amount is first deducted & then api is called
         if(message.equals("balance updated")){
           // calling rkit prepaid recharge api
           rkitResponse = apiService.prepaidRecharge(requestParams); 
-          System.out.println("Rkit response: "+rkitResponse);        
           // mapping both mobileRequest & mobileResponse to Database Entity to be passed to transaction procedure
           MapToDbEntity databaseEntity = dbEntityMapper.mapMobileToDbEntity(requestParams, rkitResponse);
           System.out.println("DB befor: "+databaseEntity+"\n");
@@ -63,8 +61,17 @@ public class RechargeController {
           databaseEntity.setServiceProvider("Rkit"); //adding Service Provider for this api
           // setting operator name based on operator code 
           databaseEntity.setOperatorName(operatorCodes.getOperator(requestParams.getOperator_code())); 
+          // in case of failed transaction, processing a refund
+          if(rkitResponse.getERROR()!=0){
+            apiService.wallentRefund(requestParams.getClientId(), requestParams.getRetailerId(), requestParams.getAmount());
+            databaseEntity.setRefund("Refund completed");
+          }
+          else{
+            // Success transaction
+            databaseEntity.setRefund("Not Req");
+          }
           System.out.println("DB after: "+databaseEntity+"\n");
-         // System.out.println(operatorCodes.getOperator(requestParams.getOperator_code()));
+          // System.out.println(operatorCodes.getOperator(requestParams.getOperator_code()));
           transProcedure.callTransactionProcedure(databaseEntity); // calling transaction procedure
           return response.mapRkitResponseToCustomResponse(rkitResponse);
         }
@@ -76,17 +83,25 @@ public class RechargeController {
 
     @PostMapping("/postpaid")
     public RechargeRsponse doPostpaidRecharge(@RequestBody MobileRecharge requestParams){
-  
       String message = apiService.checkUserBalance(requestParams.getClientId(), requestParams.getRetailerId(), requestParams.getAmount());
       if(message.equals("balance updated")){
         rkitResponse = apiService.postpaidRecharge(requestParams);
         // mapping both mobileRequest & mobileResponse to Database Entity to be passed to transaction procedure
         MapToDbEntity databaseEntity = dbEntityMapper.mapMobileToDbEntity(requestParams, rkitResponse);
-        
         databaseEntity.setServiceType("Postpaid"); // adding service type 
         databaseEntity.setTransDate(date.getTimeStamp()); //adding current transaction date
         databaseEntity.setServiceProvider("Rkit"); //adding Service Provider for this api
         databaseEntity.setOperatorName(operatorCodes.getOperator(requestParams.getOperator_code())); // setting operator name based on operator code 
+        // in case of failed transaction, processing a refund
+        if(rkitResponse.getERROR()!=0){
+          apiService.wallentRefund(requestParams.getClientId(), requestParams.getRetailerId(), requestParams.getAmount());
+          databaseEntity.setRefund("Refund completed");
+        }
+        else{
+          // Success transaction
+          databaseEntity.setRefund("Not Req");
+        }
+        System.out.println("DB after: "+databaseEntity+"\n");
         transProcedure.callTransactionProcedure(databaseEntity); // calling transaction procedure
         return response.mapRkitResponseToCustomResponse(rkitResponse);
       }
@@ -98,17 +113,31 @@ public class RechargeController {
 
     @PostMapping("/dth")
     public RechargeRsponse doDTHRecharge(@RequestBody DthRecharge requestParams){
+      System.out.println("req params1: "+requestParams+"\n");
       String message = apiService.checkUserBalance(requestParams.getClientId(), requestParams.getRetailerId(), requestParams.getAmount());
         if(message.equals("balance updated")){
           // calling rkit prepaid recharge api
-        //System.out.println("DTH: "+requestParams);
+          //System.out.println("DTH: "+requestParams);
           rkitResponse = apiService.dthRecharge(requestParams);
           System.out.println("RkitResponse: "+rkitResponse+"\n");
+          System.out.println("req params2: "+requestParams+"\n");
           MapToDbEntity databaseEntity = dbEntityMapper.mapDthToDbEntity(requestParams, rkitResponse);
           databaseEntity.setServiceType("Dth"); // adding service type 
           databaseEntity.setTransDate(date.getTimeStamp()); //adding current transaction date
           databaseEntity.setServiceProvider("Rkit");  //adding Service Provider for this api
           databaseEntity.setOperatorName(operatorCodes.getOperator(requestParams.getOperator_code())); // setting operator name based on operator code 
+          // in case of failed transaction, processing a refund
+          System.out.println("req params3: "+requestParams+"\n");
+          System.out.println("db before: "+databaseEntity+"\n");
+          if(rkitResponse.getERROR()!=0){
+            apiService.wallentRefund(requestParams.getClientId(), requestParams.getRetailerId(), requestParams.getAmount());
+            databaseEntity.setRefund("Refund completed");
+          }
+          else{
+            // Success transaction
+            databaseEntity.setRefund("Not Req");
+          }
+          System.out.println("req params4: "+requestParams+"\n");
           System.out.println("db: "+databaseEntity+"\n");
           transProcedure.callTransactionProcedure(databaseEntity); // calling transaction procedure
           return response.mapRkitResponseToCustomResponse(rkitResponse);      
@@ -122,7 +151,7 @@ public class RechargeController {
     @PostMapping("/ottplans")
     public OttPlans getPlanDetails(@RequestBody OttRecharge plans){
       //return apiService.fetchPlans(plans);
-      return apiService.fetchPlans(plans.getOperator_code());
+      return apiService.fetchOttPlans(plans.getOperator_code());
     }
 
     @PostMapping("/ott")
@@ -130,7 +159,7 @@ public class RechargeController {
       // getting recharge amount based on operator_code and plan_id 
       int planId = requestParams.getPlan_id();
       boolean valid_request = false;
-      OttPlans plans = apiService.fetchPlans(requestParams.getOperator_code());
+      OttPlans plans = apiService.fetchOttPlans(requestParams.getOperator_code());
       System.out.println("plans: "+plans);
       List<OttPlansData> list = plans.getDATA();
       for (OttPlansData planDetails : list) { 
@@ -153,7 +182,16 @@ public class RechargeController {
           databaseEntity.setTransDate(date.getTimeStamp()); //adding current transaction date
           databaseEntity.setServiceProvider("Rkit");  //adding Service Provider for this api
           databaseEntity.setOperatorName(operatorCodes.getOperator(requestParams.getOperator_code())); // setting operator name based on operator code 
-          //System.out.println("ott db: "+databaseEntity+"\n");
+           // in case of failed transaction, processing a refund
+           if(rkitResponse.getERROR()!=0){
+            apiService.wallentRefund(requestParams.getClientId(), requestParams.getRetailerId(), requestParams.getAmount());
+            databaseEntity.setRefund("Refund completed");
+          }
+          else{
+            // Success transaction
+            databaseEntity.setRefund("Not Req");
+          }
+          System.out.println("ott db: "+databaseEntity+"\n");
           transProcedure.callTransactionProcedure(databaseEntity);
           return response.mapRkitResponseToCustomResponse(rkitResponse);
 

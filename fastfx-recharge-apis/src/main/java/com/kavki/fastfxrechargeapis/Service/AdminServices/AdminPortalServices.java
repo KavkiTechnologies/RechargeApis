@@ -48,16 +48,11 @@ public class AdminPortalServices {
         return cListRepo.findAll();
     }
 
-    // public List<PrefundEntity> getPrefund(){
-    //     return prefundRepo.findAll();
-    // }
-
     public List<LoadMoney> getRequests() {
        return summeryRepo.findByRetailerIdIsNull();
     }
 
     public Double getBalance() {
-        //return prefundRepo.calcTotal();
         return cListRepo.calcTotalClientPrefund();
     }
 
@@ -98,7 +93,7 @@ public class AdminPortalServices {
         }
     }
 
-    public void updateClientbalance(LoadMoney prefundDetails) {
+    public String updateClientbalance(LoadMoney prefundDetails) {
         LoadMoney updatePrefund = summeryRepo.findByClientIdAndReference(prefundDetails.getClientId(), prefundDetails.getReference());
         String ClientId = prefundDetails.getClientId();
         Float addbalance = Float.parseFloat(updatePrefund.getAmount());
@@ -115,10 +110,15 @@ public class AdminPortalServices {
             updatePrefund.setStatus("accepted");
             summeryRepo.save(updatePrefund);
             cListRepo.save(client);
+            return "Balance Update Request Approved!";
         }
         else if(updatePrefund.getStatus().equals("pending") & prefundStatus.equals("decline")){
             updatePrefund.setStatus("rejected");
             summeryRepo.save(updatePrefund);
+            return "Balance Update Request Rejected!";
+        }
+        else{
+            return "This request cannot be processed, please connect to the admin!";
         }
     }
 

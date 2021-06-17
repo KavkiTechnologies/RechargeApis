@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kavki.fastfxrechargeapis.DAO.AdminRepositories.ClientListRepo;
 import com.kavki.fastfxrechargeapis.DAO.AdminRepositories.RetailerListRepo;
 import com.kavki.fastfxrechargeapis.DAO.RetailerRepositories.RetailerLoginRepo;
+import com.kavki.fastfxrechargeapis.DTO.MapToDbEntity;
 import com.kavki.fastfxrechargeapis.Entity.Admin.RetailerEntity;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.DthRecharge;
 import com.kavki.fastfxrechargeapis.Entity.Recharge.DthResponse;
@@ -139,7 +140,9 @@ public class RechargeService {
                     String.class);
             String jsonStr = responseUser.getBody();
             //converting json response from API to Response Obj
+            System.out.println("URL: "+uriBuilder.toUriString()+"\n");
             RkitApiResponse responseObj = new ObjectMapper().readValue(jsonStr, RkitApiResponse.class);
+            System.out.println("Rkit resonse:"+responseObj+"\n");
             return responseObj;
         }
         catch(Exception e){
@@ -196,90 +199,7 @@ public class RechargeService {
         } 
     }
 
-    public String checkRkitBalance() {
-        try{
-            String new_url = baseUrl + "/user/balance";
-            UriComponentsBuilder uriBuilder  = UriComponentsBuilder.fromUriString(new_url)
-            // Add query parameter to url 
-            .queryParam("partner_id", env.getProperty("fastfx.partner_id"))
-            .queryParam("api_password",env.getProperty("fastfx.api_password"));
-
-            ResponseEntity<String> responseUser = restTemplate.exchange(uriBuilder.toUriString() ,
-                    HttpMethod.GET,
-                    null,
-                    String.class);
-            String jsonStr = responseUser.getBody();
-            RkitWalletBalance responseObj = new ObjectMapper().readValue(jsonStr, RkitWalletBalance.class); // converting Json to java Object
-            return responseObj.getWALLET_BALANCE();
-        }
-        catch(Exception e){
-            return null;
-        }
-    }
-
-    public String checkUserBalance(String clientId, String retailerId, int amount) {
-        Float rechargeAmount, currentBalance, updatedBalance;
-        rechargeAmount = (float) amount;
-
-        if(retailerId!=null)
-        {
-                 currentBalance = Float.parseFloat(rListRepo.getWalletBalance(retailerId)); 
-                 System.out.println("cur: "+currentBalance);
-                 if(rechargeAmount<= currentBalance){
-                     updatedBalance = currentBalance - rechargeAmount;
-                     System.out.println("up: "+updatedBalance);
-                     rListRepo.updateBalance(retailerId,updatedBalance);
-                     return "balance updated";
-                 }
-                 else{
-                     return "Insufficient Balance";
-                 }
-        
-        }
-        else if(retailerId==null && clientId!=null)
-        {
-            currentBalance = Float.parseFloat(cListRepo.getWalletBalance(clientId));
-            System.out.println("cur: "+currentBalance);
-            if(rechargeAmount<= currentBalance){
-                updatedBalance = currentBalance - rechargeAmount;
-                System.out.println("up: "+updatedBalance);
-                cListRepo.updateBalance(clientId,updatedBalance);
-                return "balance updated";
-            }
-            else{
-                return "Insufficient Balance";
-            }
-        }
-        else {
-            return "Call service in proper way";
-        }
-    }
-
-    public RkitApiResponse getOrderStatus(RechargeRsponse params) {
-        try{
-            String new_url = baseUrl + "orderstatus";
-            UriComponentsBuilder uriBuilder  = UriComponentsBuilder.fromUriString(new_url)
-            // Add query parameter to url 
-            .queryParam("partner_id", env.getProperty("fastfx.partner_id"))
-            .queryParam("api_password",env.getProperty("fastfx.api_password"))
-            .queryParam("order_id", params.getOrderid())
-            .queryParam("user_var1", params.getUservar1())
-            .queryParam("user_var2",params.getUservar2())
-            .queryParam("user_var3",params.getUservar3());
-            ResponseEntity<String> responseUser = restTemplate.exchange(uriBuilder.toUriString() ,
-                    HttpMethod.GET,
-                    null,
-                    String.class);
-            String jsonStr = responseUser.getBody();
-            RkitApiResponse responseObj = new ObjectMapper().readValue(jsonStr, RkitApiResponse.class); // converting Json to java Object
-            return responseObj;
-        }
-        catch(Exception e){
-            return null;
-        }
-    }
-
-    public OttPlans fetchPlans(int operator_code) {
+    public OttPlans fetchOttPlans(int operator_code) {
         try{
             String new_url = "https://dev.rechargkit.biz/ott/planDetailsget";
             UriComponentsBuilder uriBuilder  = UriComponentsBuilder.fromUriString(new_url)
@@ -354,5 +274,111 @@ public class RechargeService {
            return null;
         } 
     }
+
+    public String checkRkitBalance() {
+        try{
+            String new_url = baseUrl + "/user/balance";
+            UriComponentsBuilder uriBuilder  = UriComponentsBuilder.fromUriString(new_url)
+            // Add query parameter to url 
+            .queryParam("partner_id", env.getProperty("fastfx.partner_id"))
+            .queryParam("api_password",env.getProperty("fastfx.api_password"));
+
+            ResponseEntity<String> responseUser = restTemplate.exchange(uriBuilder.toUriString() ,
+                    HttpMethod.GET,
+                    null,
+                    String.class);
+            String jsonStr = responseUser.getBody();
+            RkitWalletBalance responseObj = new ObjectMapper().readValue(jsonStr, RkitWalletBalance.class); // converting Json to java Object
+            return responseObj.getWALLET_BALANCE();
+        }
+        catch(Exception e){
+            return null;
+        }
+    }
+
+    public String checkUserBalance(String clientId, String retailerId, int amount) {
+        Float rechargeAmount, currentBalance, updatedBalance;
+        rechargeAmount = (float) amount;
+
+        if(retailerId!=null)
+{
+            currentBalance = Float.parseFloat(rListRepo.getWalletBalance(retailerId)); 
+            System.out.println("cur: "+currentBalance);
+            if(rechargeAmount<= currentBalance){
+                updatedBalance = currentBalance - rechargeAmount;
+                System.out.println("up: "+updatedBalance);
+                rListRepo.updateBalance(retailerId,updatedBalance);
+                return "balance updated";
+            }
+            else{
+                return "Insufficient Balance";
+            }
+        
+        }
+        else if(retailerId==null && clientId!=null)
+        {
+            currentBalance = Float.parseFloat(cListRepo.getWalletBalance(clientId));
+            System.out.println("cur: "+currentBalance);
+            if(rechargeAmount<= currentBalance){
+                updatedBalance = currentBalance - rechargeAmount;
+                System.out.println("up: "+updatedBalance);
+                cListRepo.updateBalance(clientId,updatedBalance);
+                return "balance updated";
+            }
+            else{
+                return "Insufficient Balance";
+            }
+        }
+        else {
+            return "Call service in proper way";
+        }
+    }
+
+    public RkitApiResponse getOrderStatus(RechargeRsponse params) {
+        try{
+            String new_url = baseUrl + "orderstatus";
+            UriComponentsBuilder uriBuilder  = UriComponentsBuilder.fromUriString(new_url)
+            // Add query parameter to url 
+            .queryParam("partner_id", env.getProperty("fastfx.partner_id"))
+            .queryParam("api_password",env.getProperty("fastfx.api_password"))
+            .queryParam("order_id", params.getOrderid())
+            .queryParam("user_var1", params.getUservar1())
+            .queryParam("user_var2",params.getUservar2())
+            .queryParam("user_var3",params.getUservar3());
+            ResponseEntity<String> responseUser = restTemplate.exchange(uriBuilder.toUriString() ,
+                    HttpMethod.GET,
+                    null,
+                    String.class);
+            String jsonStr = responseUser.getBody();
+            RkitApiResponse responseObj = new ObjectMapper().readValue(jsonStr, RkitApiResponse.class); // converting Json to java Object
+            return responseObj;
+        }
+        catch(Exception e){
+            return null;
+        }
+    }
+   
+	public void wallentRefund(String clientId, String retailerId, int amount) {
+        Float rechargeAmount, currentBalance, updatedBalance;
+        rechargeAmount = (float) amount;
+        System.out.println(clientId+" "+retailerId+" "+rechargeAmount);
+        if(retailerId!=null && retailerId!="self")
+        {
+            currentBalance = Float.parseFloat(rListRepo.getWalletBalance(retailerId)); 
+            System.out.println("cur baL: "+currentBalance);
+            updatedBalance = currentBalance + rechargeAmount;
+            System.out.println("up ref: "+updatedBalance);
+            rListRepo.updateBalance(retailerId,updatedBalance);
+        }
+        else 
+        {
+            System.out.println("inside"+"\n");
+            currentBalance = Float.parseFloat(cListRepo.getWalletBalance(clientId));
+            System.out.println("cur bal: "+currentBalance);
+            updatedBalance = currentBalance + rechargeAmount;
+            System.out.println("up ref: "+updatedBalance);
+            cListRepo.updateBalance(clientId,updatedBalance);
+        }
+	}
     
 }

@@ -15,7 +15,7 @@ import com.kavki.fastfxrechargeapis.DAO.AdminRepositories.TransactionRepo;
 import com.kavki.fastfxrechargeapis.DAO.ClientRepositories.LoadMoneyRepo;
 import com.kavki.fastfxrechargeapis.DAO.ClientRepositories.PaymentSummeryRepo;
 import com.kavki.fastfxrechargeapis.DAO.RetailerRepositories.RetailerLoginRepo;
-import com.kavki.fastfxrechargeapis.DTO.Encryptor;
+import com.kavki.fastfxrechargeapis.DTO.AESEncryptor;
 import com.kavki.fastfxrechargeapis.DTO.OnboardRetailerProcedure;
 import com.kavki.fastfxrechargeapis.Entity.Admin.LoginStatus;
 import com.kavki.fastfxrechargeapis.Entity.Admin.TransactionEntity;
@@ -55,7 +55,7 @@ public class RetailerPortalServices {
             return status;
         }
         String password = details.getPassword();
-        Encryptor encrypt = new Encryptor();
+        AESEncryptor encrypt = new AESEncryptor();
         String[] clientCredentials = new String[2];
         clientCredentials = encrypt.encrypt(password);
 
@@ -82,7 +82,7 @@ public class RetailerPortalServices {
             String Password = creds.getPassword();
             String encryptPass = credit.getPassword();
             String salt = credit.getSalt();
-            Encryptor encrypt = new Encryptor();
+            AESEncryptor encrypt = new AESEncryptor();
             String newPass = encrypt.verify(Password, salt);
     
             if(newPass.equalsIgnoreCase(encryptPass)){

@@ -12,14 +12,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OttPlans {
-    @JsonProperty("ERROR") 
+  //  @JsonProperty("ERROR") 
     public int eRROR;
-    @JsonProperty("SUCCESS") 
+  //  @JsonProperty("SUCCESS") 
     public int sUCCESS;
-    @JsonProperty("STATUS") 
+  //  @JsonProperty("STATUS") 
     public int sTATUS;
-    @JsonProperty("DATA") 
+  //  @JsonProperty("DATA") 
     public List<OttPlansData> dATA;
-    @JsonProperty("MESSAGE") 
+  //  @JsonProperty("MESSAGE") 
     public String mESSAGE;
 }

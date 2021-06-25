@@ -43,4 +43,6 @@ public class TransactionEntity {
     private String Commission;
     @Column(name="Charge", nullable = false)
     private String Charge;
+    @Column(name="Refund", nullable = false)
+    private String Refund;
 }

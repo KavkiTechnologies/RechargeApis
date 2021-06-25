@@ -18,7 +18,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
-public class Encryptor {
+public class AESEncryptor {
     
     public static final String algorithm = "AES/ECB/PKCS5Padding";
     private static final Random RANDOM = new SecureRandom();

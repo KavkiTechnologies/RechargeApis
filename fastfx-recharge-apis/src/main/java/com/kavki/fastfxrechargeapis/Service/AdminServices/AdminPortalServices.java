@@ -13,7 +13,7 @@ import javax.crypto.NoSuchPaddingException;
 
 import com.kavki.fastfxrechargeapis.DAO.AdminRepositories.*;
 import com.kavki.fastfxrechargeapis.DAO.ClientRepositories.PaymentSummeryRepo;
-import com.kavki.fastfxrechargeapis.DTO.Encryptor;
+import com.kavki.fastfxrechargeapis.DTO.AESEncryptor;
 import com.kavki.fastfxrechargeapis.Entity.Admin.*;
 import com.kavki.fastfxrechargeapis.Entity.Client.LoadMoney;
 
@@ -49,7 +49,7 @@ public class AdminPortalServices {
     }
 
     public List<LoadMoney> getRequests() {
-       return summeryRepo.findByRetailerIdIsNull();
+       return summeryRepo.findByRetailerId("self");
     }
 
     public Double getBalance() {
@@ -81,7 +81,7 @@ public class AdminPortalServices {
 
         String encryptPass = creds.getPassword();
         String salt = creds.getSalt();
-        Encryptor encrypt = new Encryptor();
+        AESEncryptor encrypt = new AESEncryptor();
         String newPass = encrypt.verify(Password, salt); // verifying user password 
         
         if(newPass.equalsIgnoreCase(encryptPass)){

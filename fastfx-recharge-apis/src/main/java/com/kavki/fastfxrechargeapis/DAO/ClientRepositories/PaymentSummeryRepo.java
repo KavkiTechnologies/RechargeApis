@@ -23,8 +23,10 @@ public interface PaymentSummeryRepo extends JpaRepository<LoadMoney, Integer>{
 
     LoadMoney findByRetailerIdAndReference(String retailerId, String reference);
 
-    
     @Query("Select m from load_money m where m.clientId =:cId and m.retailerId =:rId")
     List<LoadMoney> findByClientIdAndRetailerId(@Param("cId") String clientId,@Param("rId") String retailer);
+
+   // @Query("select m from load_money where retailerId = 'self' ")
+   // List<LoadMoney> getPrefundRequests();
     
 }

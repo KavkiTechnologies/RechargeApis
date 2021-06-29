@@ -19,7 +19,7 @@ public class IciciCredentials {
     private int terminalId;
     private String merchantTranId;
     private String billNumber;
-  //  private String payerVa;
+    private String userId;
     private double amount;
     private String note;
     private String collectByDate;

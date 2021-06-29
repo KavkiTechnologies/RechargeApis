@@ -83,16 +83,16 @@ public class RSAEncryptorDecryptor {
     // public static void main(String[] argss) throws IllegalBlockSizeException, InvalidKeyException, NoSuchPaddingException, BadPaddingException {
     //     try {
         
-    //         String toBeEncrypted = "{"+"\"payerVa\""+" : " +"\"testo1@icici\""+","+"\"amount\"" +": "+"\"10.00\""+","+ "\"note\"" +":"+ "\"collect-pay-request\""+","+"\"collectByDate\"" +":"+"\"23/06/2021 12:20 PM\""+","+ "\"merchantId\"" +": "+"\"401579\""+","+ "\"merchantName\""+":"+"\"Testmerchant\""+","+"\"subMerchantId\"" +": "+"\"401579\""+","+ "\"subMerchantName\"" +": "+"\"Testmerchant\""+","+"\"terminalId\"" +": "+"\"5411\""+","+"\"merchantTranId\""+" : "+"\"FASTFX012345\""+","+"\"billNumber\"" +": "+"\"FFX012\""+"}";
-    // //         String encryptedString = Base64.getEncoder().encodeToString(encrypt(toBeEncrypted, publicKey));
-    //         String encryptedString = encrypt(toBeEncrypted);
+    //         String toBeEncrypted = "{"+"\"payerVa\""+" : " +"\"testo1@icici\""+","+"\"amount\"" +": "+"\"10.00\""+","+ "\"note\"" +":"+ "\"collect-pay-request\""+","+"\"collectByDate\"" +":"+"\"30/06/2021 12:20 PM\""+","+ "\"merchantId\"" +": "+"\"401579\""+","+ "\"merchantName\""+":"+"\"Testmerchant\""+","+"\"subMerchantId\"" +": "+"\"401579\""+","+ "\"subMerchantName\"" +": "+"\"Testmerchant\""+","+"\"terminalId\"" +": "+"\"5411\""+","+"\"merchantTranId\""+" : "+"\"FASTFR98765\""+","+"\"billNumber\"" +": "+"\"FFR98765\""+"}";
+    //         String encryptedString = Base64.getEncoder().encodeToString(encrypt(toBeEncrypted, publicKey));
+    //         //String encryptedString = encrypt(toBeEncrypted);
     //         System.out.println("\nBefore encrypt: "+toBeEncrypted);
     //         System.out.println("\nencrypted test: "+encryptedString);
             
-    // //         String toDecrypt = "lDcwJhhGrFpHGug9GsMQZ066tDjmttSpV7cOMkTy8n/1xUjK+abvjvPiZmth+eTl1fLCGxrmyWoM3XG4MPCI78csU7pgYA0ZcWgWUpFyADJ936rbUvUEiikfpesBRCdiCF+CFWIN6/BeycjB3JB98xd7RpxaPBZMUk7lvVe/oR6rG6bbwF1Ks2bzqtwvOwG5Kf0QuYDw3sVmau1hF5HbgOxRCTaQbsil++t5rrMCJFIP88+mp9eSlfi6I9laWDdPLOlMjIIoICEEwwCP1ei/aQACltDomMkjhIYRhvPFb5OLYRA70vXznBeRTPk3WhtVEFqojtC3MluvTxZOVK0V4GNiOth9gVwbZy5cQbINDL4Raq+OI1uiTHNNv4J7FNeC4Rra0Ur2/zduk40LTFFtLhHwDps73GDIjHgREqkIxXccnOvdHsNmGztHV9YynhiW18PMviZyXcRCjj2bKr153M1Wjuz/Q922f9mEvLm7bDzlCKOnim2FopdFj+8gst5mYBaS7xXAW1Ot0SSX/pDRHODEw9Ld0SpFszMDBAC1svPNcorKiN2SuIM4TzP92cJyX69IB6eT0aPNu/Nk8ysZL8aALfGS9rvc4nkrglmsbhkdSJXGLMuFDsLPry2R+zMsPSlidzqq9EkuW0WEFozjJ5lmWZyTVFl/t03BLjn4P7w=";
-    // //         //System.out.println(encryptedString);
-    // //         String decryptedString = RSAEncryptorDecryptor.decrypt(toDecrypt, privateKey);
-    // //         System.out.println("\nResponse:\n"+ decryptedString);
+    //         String toDecrypt = "Q8DU0812cB7UKlC5FIKmdFVZK7CRR81KqYC1u+CVUSwV5I1EUVY+uoW9yMp6Nm7Tt1qjn8O0k5mahzPZ+hidWarbUVmC7o+6rclfjBI9SygHRFAEoGaa6fwlQresvLzHF2xvuRiwrEC/U3/TP2hHXA0bNGgfLkY8qDBJC/OeN2BIhp8hn3X54zUSWu7PM3I1Os3fG4ivY8WuyM7tgNJV8MLXiidlGOK6pnLtBwCvfQTfKW0eCBHaK4wF5QZOJhIWvtos9Skot4HEDuulXeREQgJQsZk8v9y+mBff5DDhfNoeLbhTFGA/KTHkNjA1/UZCEJSBZHzGmUyjemVBFCNYp1bHweTu/JtOfKQvXIwpitPOjxKkXDdiwbwUBrvqYyEqTomcO3iKq+I9meyr6AB/qVZsREBnIvGCIgV17cHv1BsfYtbecON1nmR8gomQa0RFdYoaiMWLL7EmWYG26skewL6fuTg4XGNjB0Rj1/p2QawUP7Ksnky3UDLK1Pl71y70Kx8EK1aAixVbqz8YSatsui45TeKapQZ8AOWxbOCBp888HiULnJtle9O5cOVsSabQTjNGckhO9zUGvQBJ3+DAWmZ5cNBBomEKhQI6ZLpgq7pTd1QIFr9WlMzbkwjWCaSqbIXtEXSikaZUgbPFCkFK7yVdwGVVQMGwkWrCjCTZ14Q=";
+    //         //System.out.println(encryptedString);
+    //         String decryptedString = RSAEncryptorDecryptor.decrypt(toDecrypt);
+    //         System.out.println("\nResponse:\n"+ decryptedString);
     //     } catch (NoSuchAlgorithmException e) {
     //         System.err.println(e.getMessage());
     //     }

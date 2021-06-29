@@ -15,7 +15,7 @@ public class PaymentController {
     private PaymentService payService;
     
     @PostMapping("/upi")
-    public void upiTransaction(@RequestBody IciciCredentials iciciCreds){
-        payService.UpiPayments(iciciCreds);
+    public String upiTransaction(@RequestBody IciciCredentials iciciCreds){
+        return payService.UpiPayments(iciciCreds);
     }
 }

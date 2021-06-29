@@ -3,8 +3,12 @@ import java.math.*;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 
+import com.kavki.fastfxrechargeapis.DAO.AdminRepositories.ClientListRepo;
 import com.kavki.fastfxrechargeapis.DTO.RSAEncryptorDecryptor;
+import com.kavki.fastfxrechargeapis.Entity.Admin.ClientEntity;
 import com.kavki.fastfxrechargeapis.Entity.Payments.IciciCredentials;
+import com.kavki.fastfxrechargeapis.Entity.Recharge.TransactionIdGenerator;
+
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -24,34 +28,41 @@ public class PaymentService {
     private RSAEncryptorDecryptor rsaUtil;
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private TransactionIdGenerator trans;
+    @Autowired
+    private ClientListRepo cListRepo;
 
     private static DecimalFormat df = new DecimalFormat("0.00");
     
-    public void UpiPayments(IciciCredentials iciciCreds) {
+    public String UpiPayments(IciciCredentials iciciCreds) {
     
+        String clientId = iciciCreds.getUserId();
+        ClientEntity client = cListRepo.findById(clientId).orElse(null);
+
         String payerVa = env.getProperty("icici.payerVa");
         String amount =  df.format(iciciCreds.getAmount());
-        String note = iciciCreds.getNote();
-        String collectByDate = iciciCreds.getCollectByDate();
+        String note = env.getProperty("icici.note");
+        String collectByDate = trans.getCurrentDateAndTime();
         String merchantId = env.getProperty("icici.merchantId");
         String merchantName = env.getProperty("icici.merchantName");
-        String subMerchantId = Long.toString(iciciCreds.getSubMerchantId());
-        String subMerchantName = iciciCreds.getSubMerchantName();
-        String terminalId = Integer.toString(iciciCreds.getTerminalId());
-        String merchantTranId = iciciCreds.getMerchantTranId();
-        String billNumber = iciciCreds.getBillNumber();
+        String subMerchantId = env.getProperty("icici.subMerchantId");
+        String subMerchantName = client.getName();
+        String terminalId = env.getProperty("icici.terminalId");
+        String merchantTranId = trans.generateTransId(clientId);
+        String billNumber = clientId;
 
-        String toBeEncrypted = "{\"payerVa\" : \""+payerVa+"\", " +
-                                "\"amount\" : \""+amount+"\", " +
-                                "\"note\" : \""+note+"\", "+
-                                "\"collectByDate\" : \""+collectByDate+"\", "+
-                                "\"merchantId\" : \""+merchantId+"\", "+
-                                "\"merchantName\" : \""+merchantName+"\", "+
-                                "\"subMerchantId\" : \""+subMerchantId+"\", "+
-                                "\"subMerchantName\" : \""+subMerchantName+"\", "+
-                                "\"terminalId\" : \""+terminalId+"\", "+
-                                "\"merchantTranId\" : \""+merchantTranId+"\", "+
-                                "\"billNumber\" : \""+billNumber+"\" }"  ;
+        String toBeEncrypted = "{\"payerVa\" : \""+payerVa+"\"," +
+                                "\"amount\" : \""+amount+"\"," +
+                                "\"note\" : \""+note+"\","+
+                                "\"collectByDate\" : \""+collectByDate+"\","+
+                                "\"merchantId\" : \""+merchantId+"\","+
+                                "\"merchantName\" : \""+merchantName+"\","+
+                                "\"subMerchantId\" : \""+subMerchantId+"\","+
+                                "\"subMerchantName\" : \""+subMerchantName+"\","+
+                                "\"terminalId\" : \""+terminalId+"\","+
+                                "\"merchantTranId\" : \""+merchantTranId+"\","+
+                                "\"billNumber\" : \""+billNumber+"\"}"  ;
 
         System.out.println("\n"+toBeEncrypted);
 
@@ -63,9 +74,10 @@ public class PaymentService {
             HttpHeaders headers = new HttpHeaders();
             //headers.setContentType(MediaType.TEXT_PLAIN);
             headers.setContentType(new MediaType("text", "plain", StandardCharsets.UTF_8));
-            headers.add(HttpHeaders.CACHE_CONTROL, "no-cache");
-            headers.add(HttpHeaders.ACCEPT_ENCODING,"*");
-            headers.add(HttpHeaders.ACCEPT_LANGUAGE,"en-US,en;q=0.8,hi;q=0.6");
+            // headers.add(HttpHeaders.CACHE_CONTROL, "no-cache");
+            // headers.add(HttpHeaders.ACCEPT_ENCODING,"*");
+            // headers.add(HttpHeaders.ACCEPT_LANGUAGE,"en-US,en;q=0.8,hi;q=0.6");
+            headers.add("apikey", "xNXlrrJksceuh44RfBKrPxWvca9hXL9T");
 
             HttpEntity<String> request = new HttpEntity<String>(encrypted,headers);
             
@@ -78,11 +90,12 @@ public class PaymentService {
 
             String responseText = rsaUtil.decrypt(jsonStr);
             System.out.println("\nres json:"+responseText);
-              
+            
+            return responseText;
         }
         catch(Exception e)
         {
-           
+           return null;
         }
 
     }

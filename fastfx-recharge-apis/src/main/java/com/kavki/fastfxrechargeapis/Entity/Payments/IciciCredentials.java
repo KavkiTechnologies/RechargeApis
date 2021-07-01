@@ -23,4 +23,8 @@ public class IciciCredentials {
     private double amount;
     private String note;
     private String collectByDate;
+
+    private String originalmerchantTranId;
+    private String originalBankRRN;
+    private String refundAmount;
 }

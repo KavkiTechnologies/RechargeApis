@@ -18,4 +18,17 @@ public class PaymentController {
     public String upiTransaction(@RequestBody IciciCredentials iciciCreds){
         return payService.UpiPayments(iciciCreds);
     }
+    @PostMapping("/refund")
+    public String upiRefund(@RequestBody IciciCredentials iciciCreds){
+        return payService.UpiPaymentsRefund(iciciCreds);
+    }
+    @PostMapping("/transactionstatus")
+    public String upiTransactionStatus(@RequestBody IciciCredentials iciciCreds){
+        return payService.UpiPaymentsStatus(iciciCreds);
+    }
+    @PostMapping("/callbackstatus")
+    public String upiTransactionCallStatus(@RequestBody IciciCredentials iciciCreds){
+        return payService.UpiPaymentsCallStatus(iciciCreds);
+    }
 }
+
